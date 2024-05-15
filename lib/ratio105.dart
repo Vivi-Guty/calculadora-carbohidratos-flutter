@@ -27,23 +27,12 @@ class _RatioInputState extends State<RatioInput> {
       CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.5);
   SharedService sharedService = SharedService();
+  ControllerService controllerService = ControllerService();
 
   void calculate() {
     setState(() {
       carbohydrates =
           sharedService.calculateCarbohydrates(ml, concentration, ratio);
-    });
-  }
-
-  void _increment() {
-    setState(() {
-      ml = ml + 50;
-    });
-  }
-
-  void _decrement() {
-    setState(() {
-      ml = ml - 50;
     });
   }
 
@@ -73,9 +62,17 @@ class _RatioInputState extends State<RatioInput> {
                   child: TextField(
                     controller: mlController,
                     onChanged: (value) {
-                      setState(() {
-                        ml = int.parse(value);
-                      });
+                      if (value.isEmpty) {
+                        return;
+                      }
+                      int? intValue = int.tryParse(value);
+                      if (intValue != null) {
+                        setState(() {
+                          ml = intValue;
+                        });
+                      } else {
+                        mlController.text = concentration.toString();
+                      }
                     },
                     keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
@@ -99,7 +96,7 @@ class _RatioInputState extends State<RatioInput> {
                             color: Colors.green, size: 50.0),
                         onPressed: () {
                           setState(() {
-                            _increment();
+                            controllerService.increment(mlController, 50);
                           });
                         },
                       ),
@@ -111,7 +108,7 @@ class _RatioInputState extends State<RatioInput> {
                       child: TextButton(
                         onPressed: () {
                           setState(() {
-                            ml = 0;
+                            controllerService.clear(mlController);
                           });
                         },
                         child: const Text('Limpiar'),
@@ -126,7 +123,7 @@ class _RatioInputState extends State<RatioInput> {
                             color: Colors.red, size: 50.0),
                         onPressed: () {
                           setState(() {
-                            _decrement();
+                            controllerService.decrement(mlController, 50);
                           });
                         },
                       ),

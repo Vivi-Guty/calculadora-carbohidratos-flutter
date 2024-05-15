@@ -31,11 +31,14 @@ class _RatioInputState extends State<RatioInput> {
       CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
   SharedService sharedService = SharedService();
+  ControllerService controllerService = ControllerService();
 
   void calculate() {
     setState(() {
-      carbohydrates =
-          sharedService.calculateCarbohydrates(ml, concentration, ratio);
+      carbohydrates = sharedService.calculateCarbohydrates(
+          int.parse(mlController.text),
+          int.parse(concentrationController.text),
+          ratio);
     });
   }
 
@@ -69,7 +72,7 @@ class _RatioInputState extends State<RatioInput> {
                                 color: Colors.green, size: 35),
                             onPressed: () {
                               setState(() {
-                                ml = ml + 50;
+                                controllerService.increment(mlController, 50);
                               });
                             },
                           ),
@@ -83,9 +86,15 @@ class _RatioInputState extends State<RatioInput> {
                               if (value.isEmpty) {
                                 return;
                               }
-                              setState(() {
-                                ml = int.parse(value);
-                              });
+                              int? intValue = int.tryParse(value);
+                              if (intValue != null) {
+                                setState(() {
+                                  concentration = intValue;
+                                });
+                              } else {
+                                concentrationController.text =
+                                    concentration.toString();
+                              }
                             },
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -102,7 +111,7 @@ class _RatioInputState extends State<RatioInput> {
                                 color: Colors.red, size: 35),
                             onPressed: () {
                               setState(() {
-                                ml = ml - 50;
+                                controllerService.decrement(mlController, 50);
                               });
                             },
                           ),
@@ -129,7 +138,8 @@ class _RatioInputState extends State<RatioInput> {
                                 color: Colors.green, size: 35),
                             onPressed: () {
                               setState(() {
-                                concentration = concentration + 1;
+                                controllerService.increment(
+                                    concentrationController, 1);
                               });
                             },
                           ),
@@ -143,9 +153,15 @@ class _RatioInputState extends State<RatioInput> {
                               if (value.isEmpty) {
                                 return;
                               }
-                              setState(() {
-                                concentration = int.parse(value);
-                              });
+                              int? intValue = int.tryParse(value);
+                              if (intValue != null) {
+                                setState(() {
+                                  concentration = intValue;
+                                });
+                              } else {
+                                concentrationController.text =
+                                    concentration.toString();
+                              }
                             },
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -162,7 +178,8 @@ class _RatioInputState extends State<RatioInput> {
                                 color: Colors.red, size: 35),
                             onPressed: () {
                               setState(() {
-                                concentration = concentration - 1;
+                                controllerService.decrement(
+                                    concentrationController, 1);
                               });
                             },
                           ),
@@ -194,6 +211,8 @@ class _RatioInputState extends State<RatioInput> {
                                         (ratio.maltodextrin + 1.0)
                                             .toStringAsFixed(2)),
                                     fructose: ratio.fructose);
+                                maltodextrinController.text =
+                                    ratio.maltodextrin.toString();
                               });
                             },
                           ),
@@ -208,12 +227,18 @@ class _RatioInputState extends State<RatioInput> {
                                   double.tryParse(value) == null) {
                                 return;
                               }
-                              setState(() {
-                                ratio = RatioImpl(
-                                    maltodextrin: double.parse(
-                                        double.parse(value).toStringAsFixed(2)),
-                                    fructose: ratio.fructose);
-                              });
+                              double? intValue = double.tryParse(value);
+                              if (intValue != null) {
+                                setState(() {
+                                  ratio = RatioImpl(
+                                      maltodextrin: double.parse(
+                                          double.parse(value)
+                                              .toStringAsFixed(2)),
+                                      fructose: ratio.fructose);
+                                });
+                              } else {
+                                ratio = ratio;
+                              }
                             },
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -234,6 +259,8 @@ class _RatioInputState extends State<RatioInput> {
                                         (ratio.maltodextrin - 1.0)
                                             .toStringAsFixed(2)),
                                     fructose: ratio.fructose);
+                                maltodextrinController.text =
+                                    ratio.maltodextrin.toString();
                               });
                             },
                           ),
@@ -265,6 +292,8 @@ class _RatioInputState extends State<RatioInput> {
                                     fructose: double.parse(
                                         (ratio.fructose + 1.0)
                                             .toStringAsFixed(2)));
+                                fructoseController.text =
+                                    ratio.fructose.toString();
                               });
                             },
                           ),
@@ -279,12 +308,17 @@ class _RatioInputState extends State<RatioInput> {
                                   double.tryParse(value) == null) {
                                 return;
                               }
-                              setState(() {
-                                ratio = RatioImpl(
-                                    maltodextrin: ratio.maltodextrin,
-                                    fructose: double.parse(double.parse(value)
-                                        .toStringAsExponential(2)));
-                              });
+                              double? intValue = double.tryParse(value);
+                              if (intValue != null) {
+                                setState(() {
+                                  ratio = RatioImpl(
+                                      maltodextrin: ratio.maltodextrin,
+                                      fructose: double.parse(double.parse(value)
+                                          .toStringAsExponential(2)));
+                                });
+                              } else {
+                                ratio = ratio;
+                              }
                             },
                             keyboardType: TextInputType.number,
                             decoration: const InputDecoration(
@@ -306,6 +340,8 @@ class _RatioInputState extends State<RatioInput> {
                                     fructose: double.parse(
                                         (ratio.fructose - 1.0)
                                             .toStringAsFixed(2)));
+                                fructoseController.text =
+                                    ratio.fructose.toString();
                               });
                             },
                           ),
