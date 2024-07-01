@@ -19,3 +19,5 @@ samples, guidance on mobile development, and a full API reference.
 Datos para la llave
 Alias: calculadoradecarbohidratos
 Clave: CalculadoraDeCarbohidratos#2024
+
+Me he quedado en intentar ejecutar el comando flutter build apk --release
