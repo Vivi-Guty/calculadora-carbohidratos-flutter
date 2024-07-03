@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'shared_service.dart';
 
 // ignore: camel_case_types
-class ratioPersonalizado extends BasePage {
-  const ratioPersonalizado({super.key, required super.title});
+class gelsCreation extends BasePage {
+  const gelsCreation({super.key, required super.title});
 
   @override
   Widget pageBody() {

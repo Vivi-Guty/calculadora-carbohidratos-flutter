@@ -123,7 +123,7 @@ class _RatioInputState extends State<RatioInput> {
                             color: Colors.red, size: 50.0),
                         onPressed: () {
                           setState(() {
-                            controllerService.decrement(mlController, 50);
+                            controllerService.increment(mlController, 50);
                           });
                         },
                       ),

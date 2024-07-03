@@ -1,3 +1,4 @@
+import 'package:calculadora_de_carbohidratos/gels_creation.dart';
 import 'package:calculadora_de_carbohidratos/personalized_ratio.dart';
 import 'package:calculadora_de_carbohidratos/ratio105.dart';
 import 'package:calculadora_de_carbohidratos/ratio108.dart';
@@ -79,6 +80,17 @@ abstract class BasePage extends StatelessWidget {
                   MaterialPageRoute(
                       builder: (context) => const ratioPersonalizado(
                           title: 'Ratio personalizado')),
+                );
+              },
+            ),
+            ListTile(
+              title: const Text('Creación de geles'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          const gelsCreation(title: 'Creación de geles')),
                 );
               },
             ),
