@@ -61,7 +61,6 @@ class _RatioInputState extends State<RatioInput> {
             children: <Widget>[
               CustomRow(
                   controller: mlController,
-                  controllerService: controllerService,
                   concentration: concentration,
                   title: 'Volumen de bebida',
                   magnitude: 'ml'),
@@ -71,7 +70,6 @@ class _RatioInputState extends State<RatioInput> {
               ),
               CustomRow(
                 controller: concentrationController,
-                controllerService: controllerService,
                 concentration: concentration,
                 title: 'Concentración de bebida',
                 magnitude: '%',
@@ -83,7 +81,6 @@ class _RatioInputState extends State<RatioInput> {
               ),
               CustomRowWithRatio(
                 controller: maltodextrinController,
-                controllerService: controllerService,
                 ratio: ratio,
                 title: 'Maltodextrina (%)',
                 concentration: concentration,
@@ -96,7 +93,6 @@ class _RatioInputState extends State<RatioInput> {
               ),
               CustomRowWithRatio(
                 controller: fructoseController,
-                controllerService: controllerService,
                 ratio: ratio,
                 title: 'Fructosa (%)',
                 concentration: concentration,

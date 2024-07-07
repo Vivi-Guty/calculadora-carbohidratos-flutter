@@ -99,8 +99,9 @@ class RatioImpl implements Ratio {
 class CustomRow extends StatelessWidget {
   // Controlador del campo de texto
   final TextEditingController controller;
+
   // Servicio controlador para manejar incrementos y decrementos
-  final ControllerService controllerService;
+  final ControllerService controllerService = ControllerService();
 
   /// Concentración inicial
   int concentration = 0;
@@ -150,7 +151,6 @@ class CustomRow extends StatelessWidget {
   /// * [whidthTextField] es el ancho del campo de texto (opcional).
   CustomRow(
       {required this.controller,
-      required this.controllerService,
       required this.concentration,
       this.title = '',
       this.magnitude = '',
@@ -228,9 +228,6 @@ class CustomRowWithRatio extends StatelessWidget {
   /// Controlador del campo de texto
   final TextEditingController controller;
 
-  /// Servicio controlador para manejar incrementos y decrementos
-  final ControllerService controllerService;
-
   /// Relación inicial de maltodextrina y fructosa
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
 
@@ -266,8 +263,6 @@ class CustomRowWithRatio extends StatelessWidget {
   ///
   /// * [controller] es el controlador del campo de texto.
   ///
-  /// * [controllerService] es el servicio controlador para manejar incrementos y decrementos.
-  ///
   /// * [ratio] es la relación de maltodextrina a fructosa.
   ///
   /// * [concentration] es la concentración inicial.
@@ -289,7 +284,6 @@ class CustomRowWithRatio extends StatelessWidget {
   /// * [whidthTextField] es el ancho del campo de texto (opcional).
   CustomRowWithRatio(
       {required this.controller,
-      required this.controllerService,
       required this.ratio,
       required this.concentration,
       required this.willBeChangedMaltodextrin,
@@ -403,5 +397,92 @@ class CustomRowWithRatio extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+/// Widget personalizado que crea una fila con controles para limpiar un TextEditingController.
+class CustomRowClear extends StatelessWidget {
+  /// Controlador del campo de texto
+  final TextEditingController controller;
+
+  /// Servicio controlador para manejar incrementos y decrementos
+  final ControllerService controllerService = ControllerService();
+
+  /// Título del campo de texto
+  String title = '';
+
+  /// Constructor para el widget `CustomRowClear`.
+  /// Widget personalizado que crea una fila con controles para limpiar un TextEditingController.
+  ///
+  /// * [controller] es el controlador del campo de texto.
+  ///
+  /// * [title] es el título del campo de texto (opcional).
+  CustomRowClear({required this.controller, this.title = 'Limpiar'});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: SizedBox(
+            height: 70,
+            child: TextButton(
+              onPressed: () {
+                this.controllerService.clear(this.controller);
+              },
+              child: Text(this.title),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
+  /// No me esta funcionando, no me devulebe el valor texto
+  /// Servicio controlador para manejar incrementos y decrementos
+  final SharedService sharedService = SharedService();
+
+  /// Controlador del campo de texto
+  final TextEditingController controller;
+
+  /// Concentración inicial
+  int concentration = 0;
+
+  /// Relación inicial de maltodextrina y fructosa
+  Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
+
+  /// Título del campo de texto
+  String title = '';
+
+  /// Implementación concreta de la interfaz CarbohydrateRatio
+  CarbohydrateRatio carbohydrates =
+      CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
+
+  /// * [controller] es el controlador del campo de texto.
+  ///
+  /// * [ratio] es la relación de maltodextrina a fructosa.
+  ///
+  /// * [concentration] es la concentración inicial.
+  ///
+  /// * [title] es el título del campo de texto (opcional).
+  ///
+  /// * [carbohydrates] es la implementación concreta de la interfaz CarbohydrateRatio.
+  CustomButton(
+      {required this.controller,
+      required this.ratio,
+      required this.concentration,
+      required this.carbohydrates,
+      this.title = 'Calcular'});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+        onPressed: () {
+          this.carbohydrates = this.sharedService.calculateCarbohydrates(
+              int.parse(this.controller.text), this.concentration, this.ratio);
+        },
+        child: Text(this.title));
   }
 }
