@@ -61,7 +61,6 @@ class _RatioInputState extends State<RatioInput> {
             children: <Widget>[
               CustomRow(
                   controller: mlController,
-                  concentration: concentration,
                   title: 'Volumen de bebida',
                   magnitude: 'ml'),
               const Divider(
@@ -70,7 +69,6 @@ class _RatioInputState extends State<RatioInput> {
               ),
               CustomRow(
                 controller: concentrationController,
-                concentration: concentration,
                 title: 'Concentración de bebida',
                 magnitude: '%',
                 deltaValue: 1,

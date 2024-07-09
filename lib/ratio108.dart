@@ -31,8 +31,8 @@ class _RatioInputState extends State<RatioInput> {
 
   void calculate() {
     setState(() {
-      carbohydrates =
-          sharedService.calculateCarbohydrates(ml, concentration, ratio);
+      carbohydrates = sharedService.calculateCarbohydrates(
+          int.parse(mlController.text), concentration, ratio);
     });
   }
 
@@ -51,85 +51,15 @@ class _RatioInputState extends State<RatioInput> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const Divider(
-                color: Colors.transparent,
-                height: 10,
-              ),
-              Center(
-                child: SizedBox(
-                  width: 200,
-                  child: TextField(
-                    controller: mlController,
-                    onChanged: (value) {
-                      if (value.isEmpty) {
-                        return;
-                      }
-                      int? intValue = int.tryParse(value);
-                      if (intValue != null) {
-                        setState(() {
-                          ml = intValue;
-                        });
-                      } else {
-                        mlController.text = concentration.toString();
-                      }
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Tamaño de bebida',
-                      suffix: Text(' ml'),
-                    ),
-                  ),
-                ),
-              ),
+              CustomRow(
+                  controller: mlController,
+                  title: 'Volumen de bebida',
+                  magnitude: 'ml'),
               const Divider(
                 color: Colors.transparent,
                 height: 20,
               ),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    child: SizedBox(
-                      height: 70,
-                      child: IconButton(
-                        icon: const Icon(Icons.add,
-                            color: Colors.green, size: 50.0),
-                        onPressed: () {
-                          setState(() {
-                            controllerService.increment(mlController, 50);
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 70,
-                      child: TextButton(
-                        onPressed: () {
-                          setState(() {
-                            controllerService.clear(mlController);
-                          });
-                        },
-                        child: const Text('Limpiar'),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 70,
-                      child: IconButton(
-                        icon: const Icon(Icons.remove,
-                            color: Colors.red, size: 50.0),
-                        onPressed: () {
-                          setState(() {
-                            controllerService.decrement(mlController, 50);
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              CustomRowClear(controller: mlController),
               const Divider(
                 color: Colors.transparent,
                 height: 20,

@@ -23,15 +23,23 @@ class RatioInput extends StatefulWidget {
 class _RatioInputState extends State<RatioInput> {
   final mlController = TextEditingController();
   final concentrationController = TextEditingController();
+  final numberGelsController = TextEditingController();
   final maltodextrinController = TextEditingController();
   final fructoseController = TextEditingController();
   int ml = 700;
   int concentration = 8;
+  int numberGels = 1;
   CarbohydrateRatio carbohydrates =
       CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
   SharedService sharedService = SharedService();
   ControllerService controllerService = ControllerService();
+  List<String> list = <String>[
+    'Ratio 1:0,8',
+    'Ratio 1:0,5',
+    'Ratio personalizado'
+  ];
+  String dropdownValue = '';
 
   void calculate() {
     setState(() {
@@ -42,13 +50,31 @@ class _RatioInputState extends State<RatioInput> {
     });
   }
 
+  void gelCalculate() {
+    setState(() {
+      carbohydrates = sharedService.gelCalculator(
+          int.parse(mlController.text),
+          int.parse(concentrationController.text),
+          ratio,
+          int.parse(numberGelsController.text));
+    });
+  }
+
+  void updateDropdownValue(String? newValue) {
+    setState(() {
+      dropdownValue = newValue!;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     mlController.text = ml.toString();
+    numberGelsController.text = numberGels.toString();
     concentrationController.text = concentration.toString();
     maltodextrinController.text = ratio.maltodextrin.toString();
     fructoseController.text = ratio.fructose.toString();
+    dropdownValue = list.first;
   }
 
   @override
@@ -59,52 +85,70 @@ class _RatioInputState extends State<RatioInput> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              CustomRow(
-                  controller: mlController,
-                  concentration: concentration,
-                  title: 'Volumen de bebida',
-                  magnitude: 'ml'),
+              // CustomRow(
+              //     controller: mlController,
+              //     title: 'Volumen de bebida',
+              //     magnitude: 'ml'),
+              // const Divider(
+              //   color: Colors.transparent,
+              //   height: 25,
+              // ),
+              CustomDropdownButton(
+                list: list,
+                selectedValue: dropdownValue,
+                onSelected: updateDropdownValue,
+              ),
               const Divider(
                 color: Colors.transparent,
                 height: 25,
               ),
               CustomRow(
-                controller: concentrationController,
-                concentration: concentration,
-                title: 'Concentración de bebida',
-                magnitude: '%',
+                controller: numberGelsController,
+                title: 'Numero de Geles a preparar',
                 deltaValue: 1,
               ),
               const Divider(
                 color: Colors.transparent,
                 height: 25,
               ),
-              CustomRowWithRatio(
-                controller: maltodextrinController,
-                ratio: ratio,
-                title: 'Maltodextrina (%)',
-                concentration: concentration,
-                willBeChangedMaltodextrin: true,
-                deltaValue: 0.1,
-              ),
-              const Divider(
-                color: Colors.transparent,
-                height: 25,
-              ),
-              CustomRowWithRatio(
-                controller: fructoseController,
-                ratio: ratio,
-                title: 'Fructosa (%)',
-                concentration: concentration,
-                willBeChangedMaltodextrin: false,
-                deltaValue: 0.1,
-              ),
-              const Divider(
-                color: Colors.transparent,
-                height: 25,
-              ),
+              if (dropdownValue == 'Ratio personalizado') ...[
+                // CustomRow(
+                //   controller: concentrationController,
+                //   title: 'Concentración de bebida',
+                //   magnitude: '%',
+                //   deltaValue: 1,
+                // ),
+                // const Divider(
+                //   color: Colors.transparent,
+                //   height: 25,
+                // ),
+                CustomRowWithRatio(
+                  controller: maltodextrinController,
+                  ratio: ratio,
+                  title: 'Maltodextrina (%)',
+                  concentration: concentration,
+                  willBeChangedMaltodextrin: true,
+                  deltaValue: 0.1,
+                ),
+                const Divider(
+                  color: Colors.transparent,
+                  height: 25,
+                ),
+                CustomRowWithRatio(
+                  controller: fructoseController,
+                  ratio: ratio,
+                  title: 'Fructosa (%)',
+                  concentration: concentration,
+                  willBeChangedMaltodextrin: false,
+                  deltaValue: 0.1,
+                ),
+                const Divider(
+                  color: Colors.transparent,
+                  height: 25,
+                ),
+              ],
               ElevatedButton(
-                onPressed: calculate,
+                onPressed: gelCalculate,
                 child: const Text('Calcular'),
               ),
               const Divider(
@@ -115,6 +159,7 @@ class _RatioInputState extends State<RatioInput> {
                   'Gramos de maltodextrina: ${carbohydrates.gramsMaltodextrin.toStringAsFixed(0)}g'),
               Text(
                   'Gramos de fructosa: ${carbohydrates.gramsFructose.toStringAsFixed(0)}g'),
+              Text('Tamaño del agua: ${dropdownValue}'),
             ],
           ),
         ),

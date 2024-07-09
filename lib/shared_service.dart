@@ -38,6 +38,19 @@ class SharedService {
       gramsFructose: (totalCarbohydrate * (ratio.fructose / partsTotals)),
     );
   }
+
+  CarbohydrateRatio gelCalculator(
+      int ml, int concentration, Ratio ratio, int numberGels) {
+    double totalCarbohydrate = ml * (concentration / 100);
+    double partsTotals = ratio.maltodextrin + ratio.fructose;
+
+    return CarbohydrateRatioImpl(
+      gramsMaltodextrin:
+          (totalCarbohydrate * (ratio.maltodextrin / partsTotals)) * numberGels,
+      gramsFructose:
+          (totalCarbohydrate * (ratio.fructose / partsTotals)) * numberGels,
+    );
+  }
 }
 
 /// Servicio controlador para manejar incrementos y decrementos de valores en TextEditingController
@@ -98,13 +111,10 @@ class RatioImpl implements Ratio {
 /// Widget personalizado que crea una fila con controles para manipular un TextEditingController
 class CustomRow extends StatelessWidget {
   // Controlador del campo de texto
-  final TextEditingController controller;
+  TextEditingController controller;
 
   // Servicio controlador para manejar incrementos y decrementos
   final ControllerService controllerService = ControllerService();
-
-  /// Concentración inicial
-  int concentration = 0;
 
   /// Título del campo de texto
   String title = '';
@@ -127,14 +137,15 @@ class CustomRow extends StatelessWidget {
   /// Valor de incremento/decremento
   int deltaValue = 50;
 
+  /// Valor anterior de controlador
+  int lastValue = 0;
+
   /// Constructor para el widget `CustomRow`.
   /// Widget personalizado que crea una fila con controles para manipular un TextEditingController
   ///
   /// * [controller] es el controlador del campo de texto.
   ///
   /// * [controllerService] es el servicio controlador para manejar incrementos y decrementos.
-  ///
-  /// * [concentration] es la concentración inicial.
   ///
   /// * [title] es el título del campo de texto (opcional).
   ///
@@ -151,7 +162,6 @@ class CustomRow extends StatelessWidget {
   /// * [whidthTextField] es el ancho del campo de texto (opcional).
   CustomRow(
       {required this.controller,
-      required this.concentration,
       this.title = '',
       this.magnitude = '',
       this.deltaValue = 50,
@@ -185,17 +195,15 @@ class CustomRow extends StatelessWidget {
                   controller: controller,
                   onChanged: (value) {
                     if (value.isEmpty) {
+                      controller.text = '';
+                      return;
+                    } else if (int.tryParse(value) == null) {
+                      controller.text = lastValue.toString();
                       return;
                     }
-                    int? intValue = int.tryParse(
-                        value); // Intenta convertir el valor a entero
-                    if (intValue != null) {
-                      concentration =
-                          intValue; // Actualiza la concentración si es válido
-                    } else {
-                      controller.text = concentration
-                          .toString(); // Restaura el valor anterior si es inválido
-                    }
+                    int intValue = int.tryParse(value) ?? lastValue;
+                    lastValue = intValue;
+                    controller.text = intValue.toString();
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
@@ -257,6 +265,12 @@ class CustomRowWithRatio extends StatelessWidget {
 
   /// Bandera para determinar si se cambia maltodextrina o fructosa
   bool willBeChangedMaltodextrin = false;
+
+  /// Valor anterior de maltodextrina
+  double lastMaltodextrin = 1.0;
+
+  /// Valor anterior de fructosa
+  double lastFructose = 0.8;
 
   /// Constructor para el widget `CustomRowWithRatio`.
   ///Widget personalizado que crea una fila con controles para manipular un TextEditingController y una relación de carbohidratos.
@@ -335,28 +349,29 @@ class CustomRowWithRatio extends StatelessWidget {
                 child: TextField(
                   controller: controller,
                   onChanged: (value) {
-                    if (value.isEmpty || double.tryParse(value) == null) {
+                    if (value.isEmpty) {
+                      controller.text = '';
+                      return;
+                    } else if (value.isEmpty ||
+                        double.tryParse(value) == null) {
+                      controller.text = this.willBeChangedMaltodextrin
+                          ? lastMaltodextrin.toString()
+                          : lastFructose.toString();
                       return;
                     }
-                    double? intValue = double.tryParse(
-                        value); // Intenta convertir el valor a doble
-                    if (intValue != null) {
-                      if (this.willBeChangedMaltodextrin) {
-                        this.ratio = RatioImpl(
-                            maltodextrin: double.parse(
-                                double.parse(value).toStringAsFixed(2)),
-                            fructose: ratio
-                                .fructose); // Actualiza la maltodextrina si es válido
-                      } else {
-                        this.ratio = RatioImpl(
-                            maltodextrin: this.ratio.maltodextrin,
-                            fructose: double.parse(double.parse(value)
-                                .toStringAsFixed(
-                                    2))); // Actualiza la fructosa si es válido
-                      }
+                    double doubleValue = double.tryParse(value) ?? 0.0;
+                    if (this.willBeChangedMaltodextrin) {
+                      this.ratio = RatioImpl(
+                          maltodextrin:
+                              double.parse(doubleValue.toStringAsFixed(2)),
+                          fructose: ratio.fructose);
+                      lastMaltodextrin = doubleValue;
                     } else {
-                      this.ratio =
-                          ratio; // Restaura la relación si el valor es inválido
+                      this.ratio = RatioImpl(
+                          maltodextrin: this.ratio.maltodextrin,
+                          fructose:
+                              double.parse(doubleValue.toStringAsFixed(2)));
+                      lastFructose = doubleValue;
                     }
                   },
                   keyboardType: TextInputType.number,
@@ -439,50 +454,25 @@ class CustomRowClear extends StatelessWidget {
   }
 }
 
-class CustomButton extends StatelessWidget {
-  /// No me esta funcionando, no me devulebe el valor texto
-  /// Servicio controlador para manejar incrementos y decrementos
-  final SharedService sharedService = SharedService();
+class CustomDropdownButton extends StatelessWidget {
+  final List<String> list;
+  final String? selectedValue;
+  final ValueChanged<String?> onSelected;
 
-  /// Controlador del campo de texto
-  final TextEditingController controller;
-
-  /// Concentración inicial
-  int concentration = 0;
-
-  /// Relación inicial de maltodextrina y fructosa
-  Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
-
-  /// Título del campo de texto
-  String title = '';
-
-  /// Implementación concreta de la interfaz CarbohydrateRatio
-  CarbohydrateRatio carbohydrates =
-      CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
-
-  /// * [controller] es el controlador del campo de texto.
-  ///
-  /// * [ratio] es la relación de maltodextrina a fructosa.
-  ///
-  /// * [concentration] es la concentración inicial.
-  ///
-  /// * [title] es el título del campo de texto (opcional).
-  ///
-  /// * [carbohydrates] es la implementación concreta de la interfaz CarbohydrateRatio.
-  CustomButton(
-      {required this.controller,
-      required this.ratio,
-      required this.concentration,
-      required this.carbohydrates,
-      this.title = 'Calcular'});
+  CustomDropdownButton({
+    required this.list,
+    required this.selectedValue,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () {
-          this.carbohydrates = this.sharedService.calculateCarbohydrates(
-              int.parse(this.controller.text), this.concentration, this.ratio);
-        },
-        child: Text(this.title));
+    return DropdownMenu<String>(
+      initialSelection: selectedValue,
+      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
+        return DropdownMenuEntry<String>(value: value, label: value);
+      }).toList(),
+      onSelected: onSelected,
+    );
   }
 }
