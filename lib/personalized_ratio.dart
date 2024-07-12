@@ -38,7 +38,9 @@ class _RatioInputState extends State<RatioInput> {
       carbohydrates = sharedService.calculateCarbohydrates(
           int.parse(mlController.text),
           int.parse(concentrationController.text),
-          ratio);
+          RatioImpl(
+              maltodextrin: double.parse(maltodextrinController.text),
+              fructose: double.parse(fructoseController.text)));
     });
   }
 
@@ -81,7 +83,6 @@ class _RatioInputState extends State<RatioInput> {
                 controller: maltodextrinController,
                 ratio: ratio,
                 title: 'Maltodextrina (%)',
-                concentration: concentration,
                 willBeChangedMaltodextrin: true,
                 deltaValue: 0.1,
               ),
@@ -93,7 +94,6 @@ class _RatioInputState extends State<RatioInput> {
                 controller: fructoseController,
                 ratio: ratio,
                 title: 'Fructosa (%)',
-                concentration: concentration,
                 willBeChangedMaltodextrin: false,
                 deltaValue: 0.1,
               ),
@@ -109,10 +109,20 @@ class _RatioInputState extends State<RatioInput> {
                 color: Colors.transparent,
                 height: 25,
               ),
-              Text(
-                  'Gramos de maltodextrina: ${carbohydrates.gramsMaltodextrin.toStringAsFixed(0)}g'),
-              Text(
-                  'Gramos de fructosa: ${carbohydrates.gramsFructose.toStringAsFixed(0)}g'),
+              ResultRow(
+                label: 'Gramos de maltodextrina',
+                value: '${carbohydrates.gramsMaltodextrin.toString()} gramos',
+                icon: Icons.local_fire_department,
+                color: Colors.red,
+                iconSize: 24.0,
+              ),
+              ResultRow(
+                label: 'Gramos de fructosa',
+                value: '${carbohydrates.gramsFructose.toString()} gramos',
+                icon: Icons.spa,
+                color: Colors.red,
+                iconSize: 24.0,
+              ),
             ],
           ),
         ),

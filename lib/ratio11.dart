@@ -72,10 +72,20 @@ class _RatioInputState extends State<RatioInput> {
                 color: Colors.transparent,
                 height: 20,
               ),
-              Text(
-                  'Gramos de maltodextrina: ${carbohydrates.gramsMaltodextrin.toStringAsFixed(0)}g'),
-              Text(
-                  'Gramos de fructosa: ${carbohydrates.gramsFructose.toStringAsFixed(0)}g'),
+              ResultRow(
+                label: 'Gramos de maltodextrina',
+                value: '${carbohydrates.gramsMaltodextrin.toString()} gramos',
+                icon: Icons.local_fire_department,
+                color: Colors.red,
+                iconSize: 24.0,
+              ),
+              ResultRow(
+                label: 'Gramos de fructosa',
+                value: '${carbohydrates.gramsFructose.toString()} gramos',
+                icon: Icons.spa,
+                color: Colors.red,
+                iconSize: 24.0,
+              ),
             ],
           ),
         ),

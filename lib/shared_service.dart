@@ -10,12 +10,34 @@ abstract class CarbohydrateRatio {
   double get gramsFructose; // Gramos de fructosa
 }
 
+abstract class GelMix {
+  /// * [gramsMaltodextrin] es la cantidad de maltodextrina en gramos.
+  /// * [gramsFructose] es la cantidad de fructosa en gramos.
+  /// * [flavorings] es la cantidad de saborizantes en gramos.
+  /// * [salts] es la cantidad de sales en gramos.
+  /// * [water] es la cantidad de agua en gramos.
+  double get gramsMaltodextrin; // Gramos de maltodextrina
+  double get gramsFructose; // Gramos de fructosa
+  double get flavorings; // Gramos de saborizantes
+  double get salts; // Gramos de sales
+  int get water; // Gramos de agua
+}
+
 /// Definición de una interfaz para la relación de componentes
 abstract class Ratio {
   /// * [maltodextrin] es el porcentaje de maltodextrina.
   /// * [fructose] es el porcentaje de fructosa.
   double get maltodextrin; // Porcentaje de maltodextrina
   double get fructose; // Porcentaje de fructosa
+}
+
+/// Definición de una interfaz para la relación de componentes
+abstract class RatioDropdownButton {
+  /// * [ratio] es ratio de carbohidratos.
+  /// * [nameDropdown] es el nombre del dropdown.
+
+  String get nameDropdown; // Es ratio de carbohidratos
+  Ratio get ratio; // Porcentaje de maltodextrina
 }
 
 // Servicio compartido que calcula los carbohidratos basados en la relación y concentración
@@ -33,22 +55,44 @@ class SharedService {
     double partsTotals = ratio.maltodextrin + ratio.fructose;
 
     return CarbohydrateRatioImpl(
-      gramsMaltodextrin:
-          (totalCarbohydrate * (ratio.maltodextrin / partsTotals)),
-      gramsFructose: (totalCarbohydrate * (ratio.fructose / partsTotals)),
+      gramsMaltodextrin: double.parse(
+          (totalCarbohydrate * (ratio.maltodextrin / partsTotals))
+              .toStringAsFixed(2)),
+      gramsFructose: double.parse(
+          (totalCarbohydrate * (ratio.fructose / partsTotals))
+              .toStringAsFixed(2)),
     );
   }
 
-  CarbohydrateRatio gelCalculator(
-      int ml, int concentration, Ratio ratio, int numberGels) {
-    double totalCarbohydrate = ml * (concentration / 100);
-    double partsTotals = ratio.maltodextrin + ratio.fructose;
+  GelMixImpl gelCalculator(
+      Ratio ratio, int numberGels, int amountCarbohydratesPerGels) {
+    int totalMix = 1000;
+    double mixingRatio = double.parse(
+        (amountCarbohydratesPerGels / totalMix).toStringAsFixed(2));
+    int flavoringsAndSalts = 100;
 
-    return CarbohydrateRatioImpl(
+    double maltodextrinForGel = double.parse(
+        (amountCarbohydratesPerGels / (ratio.maltodextrin + ratio.fructose))
+            .toStringAsFixed(2));
+    double fructoseForGel = maltodextrinForGel * ratio.fructose;
+
+    double flavorings = double.parse(
+        ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2));
+    double salts = double.parse(
+        ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2));
+
+    return GelMixImpl(
       gramsMaltodextrin:
-          (totalCarbohydrate * (ratio.maltodextrin / partsTotals)) * numberGels,
+          double.parse((maltodextrinForGel * numberGels).toStringAsFixed(2)),
       gramsFructose:
-          (totalCarbohydrate * (ratio.fructose / partsTotals)) * numberGels,
+          double.parse((fructoseForGel * numberGels).toStringAsFixed(2)),
+      flavorings: flavorings * numberGels,
+      salts: salts * numberGels,
+      water: int.parse(
+          (((maltodextrinForGel + fructoseForGel + flavorings + salts) *
+                      numberGels) /
+                  3)
+              .toStringAsFixed(0)),
     );
   }
 }
@@ -98,6 +142,27 @@ class CarbohydrateRatioImpl implements CarbohydrateRatio {
       {required this.gramsMaltodextrin, required this.gramsFructose});
 }
 
+/// Implementación concreta de la interfaz CarbohydrateRatio
+class GelMixImpl implements GelMix {
+  @override
+  final double gramsMaltodextrin;
+  @override
+  final double gramsFructose;
+  @override
+  final double flavorings;
+  @override
+  final double salts;
+  @override
+  final int water;
+
+  GelMixImpl(
+      {required this.gramsMaltodextrin,
+      required this.gramsFructose,
+      required this.flavorings,
+      required this.salts,
+      required this.water});
+}
+
 /// Implementación concreta de la interfaz Ratio
 class RatioImpl implements Ratio {
   @override
@@ -106,6 +171,14 @@ class RatioImpl implements Ratio {
   final double fructose;
 
   RatioImpl({required this.maltodextrin, required this.fructose});
+}
+
+/// Implementación concreta de la interfaz RatioDropdownButton
+class RatioDropdownButtonImpl implements RatioDropdownButton {
+  final Ratio ratio;
+  final String nameDropdown;
+
+  RatioDropdownButtonImpl({required this.ratio, required this.nameDropdown});
 }
 
 /// Widget personalizado que crea una fila con controles para manipular un TextEditingController
@@ -181,10 +254,10 @@ class CustomRow extends StatelessWidget {
               SizedBox(
                 height: this.heightIcon,
                 child: IconButton(
-                  icon:
-                      Icon(Icons.add, color: Colors.green, size: this.sizeIcon),
+                  icon: Icon(Icons.remove,
+                      color: Colors.red, size: this.sizeIcon),
                   onPressed: () {
-                    controllerService.increment(controller, this.deltaValue);
+                    controllerService.decrement(controller, this.deltaValue);
                   },
                 ),
               ),
@@ -216,10 +289,10 @@ class CustomRow extends StatelessWidget {
               SizedBox(
                 height: this.heightIcon,
                 child: IconButton(
-                  icon: Icon(Icons.remove,
-                      color: Colors.red, size: this.sizeIcon),
+                  icon:
+                      Icon(Icons.add, color: Colors.green, size: this.sizeIcon),
                   onPressed: () {
-                    controllerService.decrement(controller, this.deltaValue);
+                    controllerService.increment(controller, this.deltaValue);
                   },
                 ),
               ),
@@ -237,10 +310,7 @@ class CustomRowWithRatio extends StatelessWidget {
   final TextEditingController controller;
 
   /// Relación inicial de maltodextrina y fructosa
-  Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
-
-  /// Concentración inicial
-  int concentration = 0;
+  Ratio ratio;
 
   /// Título del campo de texto
   String title = '';
@@ -279,8 +349,6 @@ class CustomRowWithRatio extends StatelessWidget {
   ///
   /// * [ratio] es la relación de maltodextrina a fructosa.
   ///
-  /// * [concentration] es la concentración inicial.
-  ///
   /// * [willBeChangedMaltodextrin] determina si se cambia la maltodextrina o la fructosa.
   ///
   /// * [title] es el título del campo de texto (opcional).
@@ -299,7 +367,6 @@ class CustomRowWithRatio extends StatelessWidget {
   CustomRowWithRatio(
       {required this.controller,
       required this.ratio,
-      required this.concentration,
       required this.willBeChangedMaltodextrin,
       this.title = '',
       this.magnitude = '',
@@ -320,23 +387,23 @@ class CustomRowWithRatio extends StatelessWidget {
               SizedBox(
                 height: this.heightIcon,
                 child: IconButton(
-                  icon:
-                      Icon(Icons.add, color: Colors.green, size: this.sizeIcon),
+                  icon: Icon(Icons.remove,
+                      color: Colors.red, size: this.sizeIcon),
                   onPressed: () {
                     if (this.willBeChangedMaltodextrin) {
-                      // Incrementa el valor de maltodextrina y actualiza el controlador
+                      // Decrementa el valor de maltodextrina y actualiza el controlador
                       this.ratio = RatioImpl(
                           maltodextrin: double.parse(
-                              (ratio.maltodextrin + this.deltaValue)
+                              (double.parse(controller.text) - this.deltaValue)
                                   .toStringAsFixed(2)),
                           fructose: ratio.fructose);
                       controller.text = ratio.maltodextrin.toString();
                     } else {
-                      // Incrementa el valor de fructosa y actualiza el controlador
+                      // Decrementa el valor de fructosa y actualiza el controlador
                       this.ratio = RatioImpl(
                           maltodextrin: this.ratio.maltodextrin,
                           fructose: double.parse(
-                              (ratio.fructose + this.deltaValue)
+                              (double.parse(controller.text) - this.deltaValue)
                                   .toStringAsFixed(2)));
                       controller.text = ratio.fructose.toString();
                     }
@@ -375,8 +442,8 @@ class CustomRowWithRatio extends StatelessWidget {
                     }
                   },
                   keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Maltodextrina (%)',
+                  decoration: InputDecoration(
+                    labelText: this.title,
                   ),
                 ),
               ),
@@ -384,23 +451,23 @@ class CustomRowWithRatio extends StatelessWidget {
               SizedBox(
                 height: this.heightIcon,
                 child: IconButton(
-                  icon: Icon(Icons.remove,
-                      color: Colors.red, size: this.sizeIcon),
+                  icon:
+                      Icon(Icons.add, color: Colors.green, size: this.sizeIcon),
                   onPressed: () {
                     if (this.willBeChangedMaltodextrin) {
-                      // Decrementa el valor de maltodextrina y actualiza el controlador
+                      // Incrementa el valor de maltodextrina y actualiza el controlador
                       this.ratio = RatioImpl(
                           maltodextrin: double.parse(
-                              (ratio.maltodextrin - this.deltaValue)
+                              (double.parse(controller.text) + this.deltaValue)
                                   .toStringAsFixed(2)),
                           fructose: ratio.fructose);
                       controller.text = ratio.maltodextrin.toString();
                     } else {
-                      // Decrementa el valor de fructosa y actualiza el controlador
+                      // Incrementa el valor de fructosa y actualiza el controlador
                       this.ratio = RatioImpl(
                           maltodextrin: this.ratio.maltodextrin,
                           fructose: double.parse(
-                              (ratio.fructose - this.deltaValue)
+                              (double.parse(controller.text) + this.deltaValue)
                                   .toStringAsFixed(2)));
                       controller.text = ratio.fructose.toString();
                     }
@@ -455,9 +522,9 @@ class CustomRowClear extends StatelessWidget {
 }
 
 class CustomDropdownButton extends StatelessWidget {
-  final List<String> list;
-  final String? selectedValue;
-  final ValueChanged<String?> onSelected;
+  final List<RatioDropdownButton> list;
+  final RatioDropdownButton? selectedValue;
+  final ValueChanged<RatioDropdownButton?> onSelected;
 
   CustomDropdownButton({
     required this.list,
@@ -467,12 +534,45 @@ class CustomDropdownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownMenu<String>(
+    return DropdownMenu<RatioDropdownButton>(
       initialSelection: selectedValue,
-      dropdownMenuEntries: list.map<DropdownMenuEntry<String>>((String value) {
-        return DropdownMenuEntry<String>(value: value, label: value);
+      dropdownMenuEntries: list.map<DropdownMenuEntry<RatioDropdownButton>>(
+          (RatioDropdownButton value) {
+        return DropdownMenuEntry<RatioDropdownButton>(
+            value: value, label: value.nameDropdown);
       }).toList(),
       onSelected: onSelected,
+    );
+  }
+}
+
+class ResultRow extends StatelessWidget {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+  final double iconSize;
+
+  ResultRow(
+      {required this.label,
+      required this.value,
+      required this.icon,
+      this.color = Colors.black,
+      this.iconSize = 24.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(icon, color: color, size: iconSize),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            '$label: $value',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      ],
     );
   }
 }
