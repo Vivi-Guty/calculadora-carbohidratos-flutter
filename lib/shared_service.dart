@@ -65,7 +65,14 @@ class SharedService {
   }
 
   GelMixImpl gelCalculator(
-      Ratio ratio, int numberGels, int amountCarbohydratesPerGels) {
+      Ratio ratio,
+      int numberGels,
+      int amountCarbohydratesPerGels,
+      bool isCheckedFlavoring,
+      bool isCheckedSalts,
+      String nameDropdown,
+      double flavoringForGel,
+      double saltsForGel) {
     int totalMix = 1000;
     double mixingRatio = double.parse(
         (amountCarbohydratesPerGels / totalMix).toStringAsFixed(2));
@@ -76,10 +83,18 @@ class SharedService {
             .toStringAsFixed(2));
     double fructoseForGel = maltodextrinForGel * ratio.fructose;
 
-    double flavorings = double.parse(
-        ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2));
-    double salts = double.parse(
-        ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2));
+    double flavorings = isCheckedFlavoring
+        ? (nameDropdown != 'Ratio personalizado'
+            ? double.parse(
+                ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2))
+            : flavoringForGel)
+        : 0;
+    double salts = isCheckedSalts
+        ? (nameDropdown != 'Ratio personalizado'
+            ? double.parse(
+                ((flavoringsAndSalts / 2) * mixingRatio).toStringAsFixed(2))
+            : saltsForGel)
+        : 0;
 
     return GelMixImpl(
       gramsMaltodextrin:
@@ -573,6 +588,41 @@ class ResultRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomCheckboxListTile extends StatelessWidget {
+  bool? isChecked = true;
+  String title = '';
+  Color checkColor;
+  Color fillColorIsChecked;
+  Color fillColorIsNotChecked;
+  final ValueChanged<bool?>? onChanged;
+
+  CustomCheckboxListTile(
+      {required this.isChecked,
+      required this.title,
+      required this.onChanged,
+      this.checkColor = Colors.black,
+      this.fillColorIsChecked = Colors.green,
+      this.fillColorIsNotChecked = Colors.transparent});
+
+  @override
+  Widget build(BuildContext context) {
+    return CheckboxListTile(
+      title: Text(title),
+      controlAffinity: ListTileControlAffinity.leading,
+      value: isChecked,
+      checkColor: checkColor,
+      fillColor:
+          MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+        if (isChecked == true) {
+          return fillColorIsChecked;
+        }
+        return fillColorIsNotChecked;
+      }),
+      onChanged: onChanged,
     );
   }
 }

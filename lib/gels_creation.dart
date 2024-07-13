@@ -27,6 +27,8 @@ class _RatioInputState extends State<RatioInput> {
   final numberGelsController = TextEditingController();
   final maltodextrinController = TextEditingController();
   final fructoseController = TextEditingController();
+  final flavoringController = TextEditingController();
+  final saltsController = TextEditingController();
   int ml = 700;
   int concentration = 8;
   int numberGels = 1;
@@ -46,6 +48,8 @@ class _RatioInputState extends State<RatioInput> {
   RatioDropdownButton dropdownValue = RatioDropdownButtonImpl(
       ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
       nameDropdown: 'Ratio 1:0,8');
+  bool? isCheckedFlavoring = true;
+  bool? isCheckedSalts = true;
 
   void gelCalculate() {
     setState(() {
@@ -55,7 +59,12 @@ class _RatioInputState extends State<RatioInput> {
               maltodextrin: double.parse(maltodextrinController.text),
               fructose: double.parse(fructoseController.text)),
           int.parse(numberGelsController.text),
-          int.parse(amountCarbohydratesPerGelsController.text));
+          int.parse(amountCarbohydratesPerGelsController.text),
+          isCheckedFlavoring!,
+          isCheckedSalts!,
+          dropdownValue.nameDropdown,
+          double.parse(flavoringController.text),
+          double.parse(saltsController.text));
     });
   }
 
@@ -75,6 +84,8 @@ class _RatioInputState extends State<RatioInput> {
     concentrationController.text = concentration.toString();
     maltodextrinController.text = ratio.maltodextrin.toString();
     fructoseController.text = ratio.fructose.toString();
+    flavoringController.text = '1.0';
+    saltsController.text = '1.0';
     ratioDropdownButtonList = <RatioDropdownButton>[
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
@@ -116,8 +127,8 @@ class _RatioInputState extends State<RatioInput> {
                 title: 'Número de Geles a preparar',
                 deltaValue: 1,
               ),
-              const SizedBox(height: 25),
               if (dropdownValue.nameDropdown == 'Ratio personalizado') ...[
+                const SizedBox(height: 25),
                 CustomRowWithRatio(
                   controller: maltodextrinController,
                   ratio: ratio,
@@ -140,6 +151,43 @@ class _RatioInputState extends State<RatioInput> {
                   color: Colors.transparent,
                   height: 25,
                 ),
+              ],
+              CustomCheckboxListTile(
+                  isChecked: isCheckedFlavoring,
+                  title: '¿Quieres saborizante?',
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isCheckedFlavoring = value;
+                    });
+                  }),
+              if (dropdownValue.nameDropdown == 'Ratio personalizado' &&
+                  isCheckedFlavoring == true) ...[
+                CustomRowWithRatio(
+                  controller: flavoringController,
+                  ratio: ratio,
+                  title: 'Saborizante por gel',
+                  willBeChangedMaltodextrin: true,
+                  deltaValue: 0.1,
+                ),
+                const SizedBox(height: 25)
+              ],
+              CustomCheckboxListTile(
+                  isChecked: isCheckedSalts,
+                  title: '¿Quieres sales?',
+                  onChanged: (bool? value) {
+                    setState(() {
+                      isCheckedSalts = value;
+                    });
+                  }),
+              if (dropdownValue.nameDropdown == 'Ratio personalizado' &&
+                  isCheckedSalts == true) ...[
+                CustomRowWithRatio(
+                  controller: saltsController,
+                  ratio: ratio,
+                  title: 'Sales por gel',
+                  willBeChangedMaltodextrin: true,
+                  deltaValue: 0.1,
+                )
               ],
               const SizedBox(height: 25),
               ElevatedButton(
@@ -168,21 +216,27 @@ class _RatioInputState extends State<RatioInput> {
                 iconSize: 24.0,
               ),
               const SizedBox(height: 15),
-              ResultRow(
-                label: 'Gramos de saborizante',
-                value: '${gelMix.flavorings.toString()} gramos',
-                icon: Icons.emoji_food_beverage,
-                color: Colors.black,
-                iconSize: 24.0,
-              ),
-              ResultRow(
-                label: 'Gramos de sales',
-                value: '${gelMix.salts.toString()} gramos',
-                icon: Icons.local_drink,
-                color: Colors.black,
-                iconSize: 24.0,
-              ),
-              const SizedBox(height: 15),
+              if (isCheckedFlavoring == true) ...[
+                ResultRow(
+                  label: 'Gramos de saborizante',
+                  value: '${gelMix.flavorings.toString()} gramos',
+                  icon: Icons.emoji_food_beverage,
+                  color: Colors.black,
+                  iconSize: 24.0,
+                ),
+              ],
+              if (isCheckedSalts == true) ...[
+                ResultRow(
+                  label: 'Gramos de sales',
+                  value: '${gelMix.salts.toString()} gramos',
+                  icon: Icons.local_drink,
+                  color: Colors.black,
+                  iconSize: 24.0,
+                ),
+              ],
+              if (isCheckedFlavoring == true || isCheckedSalts == true) ...[
+                const SizedBox(height: 15),
+              ],
               ResultRow(
                 label: 'Mililitros de agua',
                 value: '${gelMix.water.toString()} mililitros',
