@@ -26,7 +26,7 @@ abstract class BasePage extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text('Calculadora de carbohidratos'),
+              child: Text('CarbBoos'),
             ),
             ListTile(
               title: const Text('Menu principal'),
@@ -35,7 +35,7 @@ abstract class BasePage extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const MyHomePage(
-                            title: 'Calculadora de carbohidratos',
+                            title: 'CarbBoos',
                           )),
                 );
               },
@@ -104,7 +104,7 @@ abstract class BasePage extends StatelessWidget {
 
 void main() {
   runApp(const MaterialApp(
-    home: MyHomePage(title: 'Calculadora de carbohidratos'),
+    home: MyHomePage(title: 'CarbBoos'),
   ));
 }
 
