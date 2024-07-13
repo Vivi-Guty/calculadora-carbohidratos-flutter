@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, unnecessary_this, use_key_in_widget_constructors, prefer_interpolation_to_compose_strings, prefer_const_constructors_in_immutables, prefer_const_constructors, annotate_overrides
 
 import 'package:flutter/material.dart';
 

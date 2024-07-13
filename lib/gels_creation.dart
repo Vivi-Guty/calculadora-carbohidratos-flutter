@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:calculadora_de_carbohidratos/main.dart';
 import 'package:flutter/material.dart';
 import 'shared_service.dart';
