@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="calculadora_de_carbohidratos"
+        android:label="CarbBoos"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
