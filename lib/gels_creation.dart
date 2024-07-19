@@ -42,7 +42,8 @@ class _RatioInputState extends State<RatioInput> {
       gramsFructose: 0.0,
       flavorings: 0.0,
       salts: 0.0,
-      water: 0);
+      water: 0,
+      gelWeight: 0);
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
   SharedService sharedService = SharedService();
   ControllerService controllerService = ControllerService();
@@ -246,6 +247,15 @@ class _RatioInputState extends State<RatioInput> {
                 color: Colors.blue,
                 iconSize: 24.0,
               ),
+              const SizedBox(height: 15),
+              ResultRow(
+                label: 'Peso por gel',
+                value: '${gelMix.gelWeight.toString()} gramos',
+                icon: Icons.monitor_weight,
+                color: Colors.black,
+                iconSize: 24.0,
+              ),
+              const SizedBox(height: 15),
             ],
           ),
         ),

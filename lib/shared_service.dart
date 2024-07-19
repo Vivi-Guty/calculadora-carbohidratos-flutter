@@ -21,6 +21,7 @@ abstract class GelMix {
   double get flavorings; // Gramos de saborizantes
   double get salts; // Gramos de sales
   int get water; // Gramos de agua
+  double get gelWeight; // Peso del gel
 }
 
 /// Definición de una interfaz para la relación de componentes
@@ -77,7 +78,7 @@ class SharedService {
     double mixingRatio = double.parse(
         (amountCarbohydratesPerGels / totalMix).toStringAsFixed(2));
     int flavoringsAndSalts = 100;
-
+    int water = 0;
     double maltodextrinForGel = double.parse(
         (amountCarbohydratesPerGels / (ratio.maltodextrin + ratio.fructose))
             .toStringAsFixed(2));
@@ -96,6 +97,11 @@ class SharedService {
             : saltsForGel)
         : 0;
 
+    water = int.parse(
+        (((maltodextrinForGel + fructoseForGel + flavorings + salts) *
+                    numberGels) /
+                3)
+            .toStringAsFixed(0));
     return GelMixImpl(
       gramsMaltodextrin:
           double.parse((maltodextrinForGel * numberGels).toStringAsFixed(2)),
@@ -103,11 +109,13 @@ class SharedService {
           double.parse((fructoseForGel * numberGels).toStringAsFixed(2)),
       flavorings: flavorings * numberGels,
       salts: salts * numberGels,
-      water: int.parse(
-          (((maltodextrinForGel + fructoseForGel + flavorings + salts) *
-                      numberGels) /
-                  3)
-              .toStringAsFixed(0)),
+      water: water,
+      gelWeight: double.parse((maltodextrinForGel +
+              fructoseForGel +
+              flavorings +
+              salts +
+              (water / numberGels))
+          .toStringAsFixed(2)),
     );
   }
 }
@@ -169,13 +177,16 @@ class GelMixImpl implements GelMix {
   final double salts;
   @override
   final int water;
+  @override
+  final double gelWeight;
 
   GelMixImpl(
       {required this.gramsMaltodextrin,
       required this.gramsFructose,
       required this.flavorings,
       required this.salts,
-      required this.water});
+      required this.water,
+      required this.gelWeight});
 }
 
 /// Implementación concreta de la interfaz Ratio
@@ -588,6 +599,46 @@ class ResultRow extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class CustomRowOfText extends StatelessWidget {
+  final Text text;
+  final IconData icon;
+  final Color color;
+  final double iconSize;
+
+  CustomRowOfText(
+      {required this.text,
+      required this.icon,
+      this.color = Colors.black,
+      this.iconSize = 24.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color, size: iconSize),
+        const SizedBox(width: 8),
+        this.text
+      ],
+    );
+  }
+}
+
+class CustomPaddingWithText extends StatelessWidget {
+  final Text text;
+  final double padding;
+
+  CustomPaddingWithText({required this.text, this.padding = 30.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(this.padding),
+      child: this.text,
     );
   }
 }
