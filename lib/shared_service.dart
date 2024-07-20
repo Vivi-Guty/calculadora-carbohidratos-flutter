@@ -16,12 +16,15 @@ abstract class GelMix {
   /// * [flavorings] es la cantidad de saborizantes en gramos.
   /// * [salts] es la cantidad de sales en gramos.
   /// * [water] es la cantidad de agua en gramos.
+  /// * [gelWeight] es el peso del gel.
+  /// * [wantMoreWater] es la porción que queremos de agua por gel, por defecto es un 3 parte.
   double get gramsMaltodextrin; // Gramos de maltodextrina
   double get gramsFructose; // Gramos de fructosa
   double get flavorings; // Gramos de saborizantes
   double get salts; // Gramos de sales
   int get water; // Gramos de agua
   double get gelWeight; // Peso del gel
+  double get wantMoreWater; // Peso del gel
 }
 
 /// Definición de una interfaz para la relación de componentes
@@ -73,7 +76,8 @@ class SharedService {
       bool isCheckedSalts,
       String nameDropdown,
       double flavoringForGel,
-      double saltsForGel) {
+      double saltsForGel,
+      double saltwantMoreWater) {
     int totalMix = 1000;
     double mixingRatio = double.parse(
         (amountCarbohydratesPerGels / totalMix).toStringAsFixed(2));
@@ -100,7 +104,7 @@ class SharedService {
     water = int.parse(
         (((maltodextrinForGel + fructoseForGel + flavorings + salts) *
                     numberGels) /
-                3)
+                saltwantMoreWater)
             .toStringAsFixed(0));
     return GelMixImpl(
       gramsMaltodextrin:
@@ -179,6 +183,8 @@ class GelMixImpl implements GelMix {
   final int water;
   @override
   final double gelWeight;
+  @override
+  final double wantMoreWater;
 
   GelMixImpl(
       {required this.gramsMaltodextrin,
@@ -186,7 +192,8 @@ class GelMixImpl implements GelMix {
       required this.flavorings,
       required this.salts,
       required this.water,
-      required this.gelWeight});
+      required this.gelWeight,
+      this.wantMoreWater = 3.0});
 }
 
 /// Implementación concreta de la interfaz Ratio
@@ -639,6 +646,34 @@ class CustomPaddingWithText extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(this.padding),
       child: this.text,
+    );
+  }
+}
+
+class CustomCardMain extends StatelessWidget {
+  final IconData? icon;
+  final Color? iconColor;
+  final Text title;
+  final Text subtitle;
+  final double padding;
+  final double left;
+  final double top;
+  final double right;
+  final double bottom;
+
+  CustomCardMain({required this.title, required this.subtitle, this.icon, this.iconColor, this.padding = 16.0, this.left = 0.0, this.top = 0.0, this.right = 0.0, this.bottom = 0.0});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: this.padding == 0 ? EdgeInsets.only(left: this.left, top: this.top, right: this.right, bottom: this.bottom) : EdgeInsets.symmetric(vertical: this.padding),
+      child: Card(
+        child: Column(
+          children: <Widget>[
+            ListTile(leading: Icon(this.icon), iconColor: this.iconColor, title: this.title, subtitle: this.subtitle),
+          ],
+        )
+      ),
     );
   }
 }

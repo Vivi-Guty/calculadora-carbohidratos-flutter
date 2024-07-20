@@ -31,6 +31,7 @@ class _RatioInputState extends State<RatioInput> {
   final fructoseController = TextEditingController();
   final flavoringController = TextEditingController();
   final saltsController = TextEditingController();
+  final wantMoreWaterController = TextEditingController();
   int ml = 700;
   int concentration = 8;
   int numberGels = 1;
@@ -53,6 +54,7 @@ class _RatioInputState extends State<RatioInput> {
       nameDropdown: 'Ratio 1:0,8');
   bool? isCheckedFlavoring = true;
   bool? isCheckedSalts = true;
+  bool? wantMoreWater = false;
 
   void gelCalculate() {
     setState(() {
@@ -67,7 +69,8 @@ class _RatioInputState extends State<RatioInput> {
           isCheckedSalts!,
           dropdownValue.nameDropdown,
           double.parse(flavoringController.text),
-          double.parse(saltsController.text));
+          double.parse(saltsController.text),
+          double.parse(wantMoreWaterController.text));
     });
   }
 
@@ -89,6 +92,7 @@ class _RatioInputState extends State<RatioInput> {
     fructoseController.text = ratio.fructose.toString();
     flavoringController.text = '1.0';
     saltsController.text = '1.0';
+    wantMoreWaterController.text = '3.0';
     ratioDropdownButtonList = <RatioDropdownButton>[
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
@@ -154,6 +158,24 @@ class _RatioInputState extends State<RatioInput> {
                   color: Colors.transparent,
                   height: 25,
                 ),
+              ],
+              CustomCheckboxListTile(
+                  isChecked: wantMoreWater,
+                  title: '¿Quieres cambiar la cantidad de agua por gel?',
+                  onChanged: (bool? value) {
+                    setState(() {
+                      wantMoreWater = value;
+                    });
+                  }),
+              if (wantMoreWater == true) ...[
+                CustomRowWithRatio(
+                  controller: wantMoreWaterController,
+                  ratio: ratio,
+                  title: 'Cantidad de agua por gel',
+                  willBeChangedMaltodextrin: true,
+                  deltaValue: 0.1,
+                ),
+                const SizedBox(height: 25)
               ],
               CustomCheckboxListTile(
                   isChecked: isCheckedFlavoring,
