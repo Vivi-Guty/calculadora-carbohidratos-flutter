@@ -1,10 +1,16 @@
-import 'package:calculadora_de_carbohidratos/main.dart';
+import 'package:calculadora_de_carbohidratos/models/carbohydrate_ratio.dart';
+import 'package:calculadora_de_carbohidratos/models/ratio.dart';
+import 'package:calculadora_de_carbohidratos/models/ratio_dropdown_button.dart';
+import 'package:calculadora_de_carbohidratos/services/shared_service.dart';
+import 'package:calculadora_de_carbohidratos/shared/base_page.dart';
 import 'package:flutter/material.dart';
-import 'shared_service.dart';
+import 'widgets/custom_dropdown_button.dart';
+import 'widgets/custom_row.dart';
+import 'widgets/custom_row_with_ratio.dart';
+import 'widgets/result_row.dart';
 
-// ignore: camel_case_types
-class creationIsotonicDrink extends BasePage {
-  const creationIsotonicDrink({super.key, required super.title});
+class CreationIsotonicDrink extends BasePage {
+  const CreationIsotonicDrink({super.key, required super.title});
 
   @override
   Widget pageBody() {
@@ -31,7 +37,6 @@ class _RatioInputState extends State<RatioInput> {
       CarbohydrateRatioImpl(gramsMaltodextrin: 0, gramsFructose: 0);
   Ratio ratio = RatioImpl(maltodextrin: 1, fructose: 0.8);
   SharedService sharedService = SharedService();
-  ControllerService controllerService = ControllerService();
   List<RatioDropdownButton> ratioDropdownButtonList = <RatioDropdownButton>[];
   RatioDropdownButton dropdownValue = RatioDropdownButtonImpl(
       ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
@@ -39,12 +44,18 @@ class _RatioInputState extends State<RatioInput> {
 
   void calculate() {
     setState(() {
+      if (dropdownValue.nameDropdown == 'Ratio personalizado') {
+        ratio = RatioImpl(
+            maltodextrin: double.parse(maltodextrinController.text),
+            fructose: double.parse(fructoseController.text));
+      } else {
+        ratio = dropdownValue.ratio;
+      }
       carbohydrates = sharedService.calculateCarbohydrates(
           int.parse(mlController.text),
           int.parse(concentrationController.text),
           RatioImpl(
-              maltodextrin: dropdownValue.ratio.maltodextrin,
-              fructose: dropdownValue.ratio.fructose));
+              maltodextrin: ratio.maltodextrin, fructose: ratio.fructose));
     });
   }
 
@@ -88,64 +99,84 @@ class _RatioInputState extends State<RatioInput> {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              CustomDropdownButton(
-                list: ratioDropdownButtonList,
-                selectedValue: dropdownValue,
-                onSelected: updateDropdownValue,
-              ),
-              CustomRow(
-                  controller: mlController,
-                  title: 'Volumen de bebida',
-                  magnitude: 'ml'),
-              if (dropdownValue.nameDropdown == 'Ratio personalizado') ...[
-                const SizedBox(height: 25),
-                CustomRow(
-                  controller: concentrationController,
-                  title: 'Concentración de bebida',
-                  magnitude: '%',
-                  deltaValue: 1,
+              Card(
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 25),
+                    CustomDropdownButton(
+                      list: ratioDropdownButtonList,
+                      selectedValue: dropdownValue,
+                      onSelected: updateDropdownValue,
+                    ),
+                    CustomRow(
+                      controller: mlController,
+                      title: 'Volumen de bebida',
+                      magnitude: 'ml',
+                      marginLeft: 15,
+                    ),
+                    if (dropdownValue.nameDropdown ==
+                        'Ratio personalizado') ...[
+                      const SizedBox(height: 25),
+                      CustomRow(
+                        controller: concentrationController,
+                        title: 'Concentración de bebida',
+                        magnitude: '%',
+                        deltaValue: 1,
+                      ),
+                      const SizedBox(height: 25),
+                      CustomRowWithRatio(
+                        controller: maltodextrinController,
+                        ratio: ratio,
+                        title: 'Maltodextrina (%)',
+                        willBeChangedMaltodextrin: true,
+                        deltaValue: 0.1,
+                      ),
+                      const SizedBox(height: 25),
+                      CustomRowWithRatio(
+                        controller: fructoseController,
+                        ratio: ratio,
+                        title: 'Fructosa (%)',
+                        willBeChangedMaltodextrin: false,
+                        deltaValue: 0.1,
+                      )
+                    ],
+                    const SizedBox(height: 25),
+                    ElevatedButton(
+                      onPressed: calculate,
+                      child: const Text('Calcular'),
+                    ),
+                    const SizedBox(height: 25),
+                  ],
                 ),
-                const SizedBox(height: 25),
-                CustomRowWithRatio(
-                  controller: maltodextrinController,
-                  ratio: ratio,
-                  title: 'Maltodextrina (%)',
-                  willBeChangedMaltodextrin: true,
-                  deltaValue: 0.1,
+              ),
+              const SizedBox(height: 5),
+              Card(
+                child: Column(
+                  children: <Widget>[
+                    const SizedBox(height: 25),
+                    const Text(
+                      'Resultados',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    ResultRow(
+                      label: 'Gramos de maltodextrina',
+                      value:
+                          '${carbohydrates.gramsMaltodextrin.toString()} gramos',
+                      icon: Icons.energy_savings_leaf,
+                      color: Colors.red,
+                      iconSize: 24.0,
+                    ),
+                    ResultRow(
+                      label: 'Gramos de fructosa',
+                      value: '${carbohydrates.gramsFructose.toString()} gramos',
+                      icon: Icons.energy_savings_leaf,
+                      color: Colors.red,
+                      iconSize: 24.0,
+                    ),
+                    const SizedBox(height: 25),
+                  ],
                 ),
-                const SizedBox(height: 25),
-                CustomRowWithRatio(
-                  controller: fructoseController,
-                  ratio: ratio,
-                  title: 'Fructosa (%)',
-                  willBeChangedMaltodextrin: false,
-                  deltaValue: 0.1,
-                )
-              ],
-              const SizedBox(height: 25),
-              ElevatedButton(
-                onPressed: calculate,
-                child: const Text('Calcular'),
-              ),
-              const SizedBox(height: 25),
-              const Divider(color: Colors.grey),
-              const Text(
-                'Resultados',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              ResultRow(
-                label: 'Gramos de maltodextrina',
-                value: '${carbohydrates.gramsMaltodextrin.toString()} gramos',
-                icon: Icons.local_fire_department,
-                color: Colors.red,
-                iconSize: 24.0,
-              ),
-              ResultRow(
-                label: 'Gramos de fructosa',
-                value: '${carbohydrates.gramsFructose.toString()} gramos',
-                icon: Icons.spa,
-                color: Colors.red,
-                iconSize: 24.0,
               ),
             ],
           ),
