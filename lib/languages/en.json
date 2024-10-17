@@ -1,6 +1,22 @@
 {
-    "title": "Welcome",
-    "description": "Application explanation",
-    "changeLanguage": "Change language"
-  }
-  
+  "title": "Welcome",
+  "description": "Application explanation",
+  "changeLanguage": "Change language",
+  "app_description": "In this application, the quantities of fructose, maltodextrin, and salts will be calculated based on the amount of gels we want to create or the amount of water we want to add. We will be able to modify the carbohydrate ratio, and we will also be able to create personalized gels or isotonic drinks.",
+  "usage_drink_description": "We have the option to choose the carbohydrate ratio, which is the amount of maltodextrin and fructose we want in the mix. By default, the ratio is 1:0.8. If we want to change it, at the top of the screen we have a button that allows us to modify the ratio. Once we have chosen the desired ratio, at the bottom of the screen we need to enter the amount of water. If we have selected the personalized ratio option, we will need to input the maltodextrin and fructose ratio, as well as the carbohydrate concentration we want in the mix. After entering the data, we press the calculate button, and the results will appear.",
+  "maltodextrin_grams": "Grams of maltodextrin",
+  "maltodextrin_description": "This will be the amount of maltodextrin we need to add to the mix",
+  "usage_drink": "How to use the isotonic drink",
+  "fructose_grams": "Grams of fructose",
+  "fructose_description": "This will be the amount of fructose we need to add to the mix",
+  "usage_gels": "How to use the gel creations",
+  "usage_gels_description": "We have the option to choose the carbohydrate ratio, which is the amount of maltodextrin and fructose we want in the mix. By default, the ratio is 1:0.8. If we want to change it, at the top of the screen, there is a button that allows us to modify the ratio. Once we have chosen the desired ratio, at the bottom of the screen we have the option to select if we want flavoring or salts. If we have selected the personalized ratio option, we have the option to input the maltodextrin, fructose, flavoring, salts, and water ratio (to adjust the amount of water in the mix, enter the desired amount (by default, one-third of the total weight). For example, for a 100g mix, the default value is 33g of water. If you want more water, enter a lower number; if you want less water, enter a higher number. After entering the data, we press the calculate button, and the results will appear.",
+  "flavoring_grams": "Grams of flavoring",
+  "flavoring_description": "This will be the amount of flavoring we need to add to the mix",
+  "salts_grams": "Grams of salts",
+  "salts_description": "This will be the amount of salts we need to add to the mix",
+  "water_ml": "Milliliters of water",
+  "water_description": "This will be the amount of water we need to add to the mix",
+  "gel_weight": "Weight per gel",
+  "gel_weight_description": "This is the weight of each gel we create"
+}

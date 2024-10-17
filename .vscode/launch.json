@@ -4,6 +4,22 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        // Flutter (Pixel 8 Pro)
+        {
+            "name": "Pixel 8 Pro",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554",
+            "flutterMode": "debug"
+        },
+        // Flutter (Resizable)
+        {
+            "name": "Resizable",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "emulator-5554",
+            "flutterMode": "debug"
+        },
         // Flutter (Pixel 5 API 30)
         {
             "name": "Flutter (Pixel 5 API 30)",

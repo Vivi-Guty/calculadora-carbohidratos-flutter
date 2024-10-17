@@ -1,4 +1,6 @@
 import 'package:calculadora_de_carbohidratos/login/login_screen.dart';
+import 'package:calculadora_de_carbohidratos/provider/locale_provider.dart';
+import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../theme/theme_notifier.dart';
@@ -72,6 +74,16 @@ abstract class BasePage extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop(); // Cierra el diálogo
                 _changeUsername(context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit),
+              title: Text(LocalizationService.of(context)
+                      ?.translate('changeLanguage') ??
+                  'Tradución no disponible'),
+              onTap: () {
+                Navigator.of(context).pop(); // Cierra el diálogo
+                _changeLanguage(context);
               },
             ),
           ],
@@ -151,6 +163,73 @@ abstract class BasePage extends StatelessWidget {
                 // Implementa la lógica para guardar el nuevo nombre de usuario
                 // String newUsername = usernameController.text;
                 // Actualiza la entidad del usuario o envía el nuevo nombre de usuario a la base de datos
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _changeLanguage(BuildContext context) {
+    final List<Locale> supportedLocales = [
+      const Locale('en', ''), // Inglés
+      const Locale('es', ''), // Español
+    ];
+
+    Locale selectedLocale = supportedLocales.first;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Cambiar Idioma'),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return DropdownButton<Locale>(
+                value: selectedLocale,
+                onChanged: (Locale? newLocale) {
+                  if (newLocale != null) {
+                    setState(() {
+                      selectedLocale = newLocale;
+                    });
+                  }
+                },
+                items: supportedLocales
+                    .map<DropdownMenuItem<Locale>>((Locale locale) {
+                  String languageName;
+                  switch (locale.languageCode) {
+                    case 'en':
+                      languageName = 'Inglés';
+                      break;
+                    case 'es':
+                      languageName = 'Español';
+                      break;
+                    default:
+                      languageName = locale.languageCode;
+                  }
+                  return DropdownMenuItem<Locale>(
+                    value: locale,
+                    child: Text(languageName),
+                  );
+                }).toList(),
+              );
+            },
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Guardar'),
+              onPressed: () {
+                // Cambia el idioma utilizando el LocaleProvider
+                Provider.of<LocaleProvider>(context, listen: false)
+                    .setLocale(selectedLocale);
                 Navigator.of(context).pop();
               },
             ),
