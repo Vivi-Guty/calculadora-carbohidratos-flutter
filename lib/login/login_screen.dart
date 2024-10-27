@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:calculadora_de_carbohidratos/login/users.dart';
 import 'package:calculadora_de_carbohidratos/my_home_page.dart';
 import 'package:calculadora_de_carbohidratos/provider/user_provider.dart';
+import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
@@ -60,7 +61,8 @@ class LoginScreen extends StatelessWidget {
   Future<String?>? _authLoginUser(BuildContext context, LoginData data) async {
     final user = User.validateLogin(data.name, data.password, users);
     if (user.email == '' || user.password == '') {
-      return 'Usuario o contraseña incorrectos';
+      return LocalizationService.of(context)
+          .translate('incorrect_user_or_password');
     }
 
     // Cachear el usuario en SharedPreferences
@@ -79,8 +81,9 @@ class LoginScreen extends StatelessWidget {
   Future<String?> _authSignupUser(BuildContext context, SignupData data) async {
     final user = User.validateLogin(data.name, data.password, users);
     if (user.email == '' || user.password == '') {
-      return Future.delayed(Duration.zero)
-          .then((_) => 'Usuario o contraseña incorrectos');
+      return Future.delayed(Duration.zero).then((_) =>
+          LocalizationService.of(context)
+              .translate('incorrect_user_or_password'));
     }
 
     // Cachear el usuario en SharedPreferences
@@ -96,10 +99,11 @@ class LoginScreen extends StatelessWidget {
     return Future.delayed(Duration.zero).then((_) => null);
   }
 
-  Future<String?> _recoverPassword(String name) {
+  Future<String?> _recoverPassword(BuildContext context, String name) {
     final user = User.findByEmail(name, users);
     if (user == null) {
-      return Future.delayed(Duration.zero).then((_) => 'Usuario no encontrado');
+      return Future.delayed(Duration.zero).then(
+          (_) => LocalizationService.of(context).translate('user_not_found'));
     }
     return Future.delayed(Duration.zero).then((_) => null);
   }
@@ -107,10 +111,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'CarbBoos',
+      title: LocalizationService.of(context).translate('application_name'),
       onLogin: (LoginData data) => _authLoginUser(context, data),
       onSignup: (SignupData data) => _authSignupUser(context, data),
-      onRecoverPassword: _recoverPassword,
+      onRecoverPassword: (String name) => _recoverPassword(context, name),
       theme: LoginTheme(
         primaryColor:
             Provider.of<ThemeNotifier>(context).currentTheme.primaryColor,
@@ -124,7 +128,9 @@ class LoginScreen extends StatelessWidget {
       ),
       onSubmitAnimationCompleted: () {
         Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => const MyHomePage(title: 'CarbBoos'),
+          builder: (context) => MyHomePage(
+              title: LocalizationService.of(context)
+                  .translate('application_name')),
         ));
       },
       // Aquí desactivamos la validación del email

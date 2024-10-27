@@ -1,6 +1,7 @@
 import 'package:calculadora_de_carbohidratos/models/carbohydrate_ratio.dart';
 import 'package:calculadora_de_carbohidratos/models/ratio.dart';
 import 'package:calculadora_de_carbohidratos/models/ratio_dropdown_button.dart';
+import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:calculadora_de_carbohidratos/services/shared_service.dart';
 import 'package:calculadora_de_carbohidratos/shared/base_page.dart';
 import 'package:flutter/material.dart';
@@ -39,8 +40,9 @@ class _RatioInputState extends State<RatioInput> {
   SharedService sharedService = SharedService();
   List<RatioDropdownButton> ratioDropdownButtonList = <RatioDropdownButton>[];
   RatioDropdownButton dropdownValue = RatioDropdownButtonImpl(
-      ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
-      nameDropdown: 'Ratio 1:0,8');
+    nameDropdown: '',
+    ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
+  );
 
   void calculate() {
     setState(() {
@@ -66,8 +68,8 @@ class _RatioInputState extends State<RatioInput> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     mlController.text = ml.toString();
     concentrationController.text = concentration.toString();
     maltodextrinController.text = ratio.maltodextrin.toString();
@@ -75,18 +77,27 @@ class _RatioInputState extends State<RatioInput> {
     ratioDropdownButtonList = <RatioDropdownButton>[
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
-          nameDropdown: 'Ratio 1:0,8'),
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', '1:0,8') ==
+                  'Translation not available'
+              ? 'Translation not available 1:0,8'
+              : LocalizationService.of(context).translate('ratio', '1:0,8')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.5),
-          nameDropdown: 'Ratio 1:0,5'),
-      RatioDropdownButtonImpl(
-          ratio: RatioImpl(maltodextrin: 1, fructose: 1),
-          nameDropdown: 'Ratio 1:1'),
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', '1:0,5') ==
+                  'Translation not available'
+              ? 'Translation not available 1:0,5'
+              : LocalizationService.of(context).translate('ratio', '1:0,5')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(
               maltodextrin: double.parse(maltodextrinController.text),
               fructose: double.parse(fructoseController.text)),
-          nameDropdown: 'Ratio personalizado')
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', 'custom') ==
+                  'Translation not available'
+              ? 'Translation not available custom'
+              : LocalizationService.of(context).translate('ratio', 'custom'))
     ];
     dropdownValue = ratioDropdownButtonList.first;
   }
@@ -110,16 +121,24 @@ class _RatioInputState extends State<RatioInput> {
                     ),
                     CustomRow(
                       controller: mlController,
-                      title: 'Volumen de bebida',
-                      magnitude: 'ml',
+                      title: LocalizationService.of(context)
+                          .translate('drink_volume'),
+                      magnitude: LocalizationService.of(context)
+                          .translate('ml', '', true),
                       marginLeft: 15,
                     ),
                     if (dropdownValue.nameDropdown ==
-                        'Ratio personalizado') ...[
+                        (LocalizationService.of(context)
+                                    .translate('ratio', 'custom') ==
+                                'Translation not available'
+                            ? 'Translation not available custom'
+                            : LocalizationService.of(context)
+                                .translate('ratio', 'custom'))) ...[
                       const SizedBox(height: 25),
                       CustomRow(
                         controller: concentrationController,
-                        title: 'Concentración de bebida',
+                        title: LocalizationService.of(context)
+                            .translate('drink_concentration'),
                         magnitude: '%',
                         deltaValue: 1,
                       ),
@@ -127,7 +146,8 @@ class _RatioInputState extends State<RatioInput> {
                       CustomRowWithRatio(
                         controller: maltodextrinController,
                         ratio: ratio,
-                        title: 'Maltodextrina (%)',
+                        title: LocalizationService.of(context)
+                            .translate('grams_of', 'maltodextrin'),
                         willBeChangedMaltodextrin: true,
                         deltaValue: 0.1,
                       ),
@@ -135,7 +155,8 @@ class _RatioInputState extends State<RatioInput> {
                       CustomRowWithRatio(
                         controller: fructoseController,
                         ratio: ratio,
-                        title: 'Fructosa (%)',
+                        title: LocalizationService.of(context)
+                            .translate('grams_of', 'fructose'),
                         willBeChangedMaltodextrin: false,
                         deltaValue: 0.1,
                       )
@@ -143,7 +164,8 @@ class _RatioInputState extends State<RatioInput> {
                     const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: calculate,
-                      child: const Text('Calcular'),
+                      child: Text(LocalizationService.of(context)
+                          .translate('calculate')),
                     ),
                     const SizedBox(height: 25),
                   ],
@@ -154,22 +176,25 @@ class _RatioInputState extends State<RatioInput> {
                 child: Column(
                   children: <Widget>[
                     const SizedBox(height: 25),
-                    const Text(
-                      'Resultados',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Text(
+                      LocalizationService.of(context).translate('results'),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     ResultRow(
-                      label: 'Gramos de maltodextrina',
+                      label: LocalizationService.of(context)
+                          .translate('grams_of', 'maltodextrin'),
                       value:
-                          '${carbohydrates.gramsMaltodextrin.toString()} gramos',
+                          '${carbohydrates.gramsMaltodextrin.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                       icon: Icons.energy_savings_leaf,
                       color: Colors.red,
                       iconSize: 24.0,
                     ),
                     ResultRow(
-                      label: 'Gramos de fructosa',
-                      value: '${carbohydrates.gramsFructose.toString()} gramos',
+                      label: LocalizationService.of(context)
+                          .translate('grams_of', 'fructose'),
+                      value:
+                          '${carbohydrates.gramsFructose.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                       icon: Icons.energy_savings_leaf,
                       color: Colors.red,
                       iconSize: 24.0,

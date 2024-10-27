@@ -54,7 +54,7 @@ abstract class BasePage extends StatelessWidget {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.logout),
-              title: const Text('Cerrar sesión'),
+              title: Text(LocalizationService.of(context).translate('logout')),
               onTap: () {
                 Navigator.of(context).pop(); // Cierra el diálogo
                 _logout(context);
@@ -62,7 +62,8 @@ abstract class BasePage extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.lock),
-              title: const Text('Cambiar contraseña'),
+              title: Text(
+                  LocalizationService.of(context).translate('change_password')),
               onTap: () {
                 Navigator.of(context).pop(); // Cierra el diálogo
                 _changePassword(context);
@@ -70,7 +71,8 @@ abstract class BasePage extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.edit),
-              title: const Text('Cambiar nombre de usuario'),
+              title: Text(
+                  LocalizationService.of(context).translate('change_username')),
               onTap: () {
                 Navigator.of(context).pop(); // Cierra el diálogo
                 _changeUsername(context);
@@ -78,9 +80,8 @@ abstract class BasePage extends StatelessWidget {
             ),
             ListTile(
               leading: const Icon(Icons.edit),
-              title: Text(LocalizationService.of(context)
-                      ?.translate('changeLanguage') ??
-                  'Tradución no disponible'),
+              title: Text(
+                  LocalizationService.of(context).translate('change_language')),
               onTap: () {
                 Navigator.of(context).pop(); // Cierra el diálogo
                 _changeLanguage(context);
@@ -106,23 +107,25 @@ abstract class BasePage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Cambiar Contraseña'),
+          title: Text(
+              LocalizationService.of(context).translate('change_password')),
           content: TextField(
             controller: passwordController,
-            decoration: const InputDecoration(
-              labelText: 'Nueva Contraseña',
+            decoration: InputDecoration(
+              labelText:
+                  LocalizationService.of(context).translate('new_password'),
             ),
             obscureText: true,
           ),
           actions: [
             TextButton(
-              child: const Text('Cancelar'),
+              child: Text(LocalizationService.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Guardar'),
+              child: Text(LocalizationService.of(context).translate('save')),
               onPressed: () {
                 // Implementa la lógica para guardar la nueva contraseña
                 // String newPassword = passwordController.text;
@@ -143,22 +146,24 @@ abstract class BasePage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Cambiar Nombre de Usuario'),
+          title: Text(
+              LocalizationService.of(context).translate('change_username')),
           content: TextField(
             controller: usernameController,
-            decoration: const InputDecoration(
-              labelText: 'Nuevo Nombre de Usuario',
+            decoration: InputDecoration(
+              labelText:
+                  LocalizationService.of(context).translate('new_username'),
             ),
           ),
           actions: [
             TextButton(
-              child: const Text('Cancelar'),
+              child: Text(LocalizationService.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Guardar'),
+              child: Text(LocalizationService.of(context).translate('save')),
               onPressed: () {
                 // Implementa la lógica para guardar el nuevo nombre de usuario
                 // String newUsername = usernameController.text;
@@ -184,7 +189,8 @@ abstract class BasePage extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Cambiar Idioma'),
+          title: Text(
+              LocalizationService.of(context).translate('change_language')),
           content: StatefulBuilder(
             builder: (context, setState) {
               return DropdownButton<Locale>(
@@ -201,10 +207,12 @@ abstract class BasePage extends StatelessWidget {
                   String languageName;
                   switch (locale.languageCode) {
                     case 'en':
-                      languageName = 'Inglés';
+                      languageName = LocalizationService.of(context)
+                          .translateSingleWord('english', 'en');
                       break;
                     case 'es':
-                      languageName = 'Español';
+                      languageName = LocalizationService.of(context)
+                          .translateSingleWord('spanish', 'es');
                       break;
                     default:
                       languageName = locale.languageCode;
@@ -219,13 +227,13 @@ abstract class BasePage extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              child: const Text('Cancelar'),
+              child: Text(LocalizationService.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text('Guardar'),
+              child: Text(LocalizationService.of(context).translate('save')),
               onPressed: () {
                 // Cambia el idioma utilizando el LocaleProvider
                 Provider.of<LocaleProvider>(context, listen: false)

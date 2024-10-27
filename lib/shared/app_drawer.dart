@@ -1,3 +1,4 @@
+import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:flutter/material.dart';
 import '../../creation_isotonic_drink.dart';
 import '../../gels_creation.dart';
@@ -12,41 +13,48 @@ class AppDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          const DrawerHeader(
-            decoration: BoxDecoration(
+          DrawerHeader(
+            decoration: const BoxDecoration(
               color: Colors.blue,
             ),
-            child: Text('CarbBoos'),
+            child: Text(
+                LocalizationService.of(context).translate('application_name')),
           ),
           ListTile(
-            title: const Text('Menu principal'),
+            title: Text(LocalizationService.of(context).translate('main_menu')),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => const MyHomePage(title: 'CarbBoos')),
+                    builder: (context) => MyHomePage(
+                        title: LocalizationService.of(context)
+                            .translate('application_name'))),
               );
             },
           ),
           ListTile(
-            title: const Text('Bebida isotónica'),
+            title: Text(
+                LocalizationService.of(context).translate('isotonic_drink')),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        const CreationIsotonicDrink(title: 'Bebida isotónica')),
+                    builder: (context) => CreationIsotonicDrink(
+                        title: LocalizationService.of(context)
+                            .translate('isotonic_drink'))),
               );
             },
           ),
           ListTile(
-            title: const Text('Creación de geles'),
+            title:
+                Text(LocalizationService.of(context).translate('gel_creation')),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) =>
-                        const GelsCreation(title: 'Creación de geles')),
+                    builder: (context) => GelsCreation(
+                        title: LocalizationService.of(context)
+                            .translate('gel_creation'))),
               );
             },
           ),
