@@ -30,7 +30,9 @@ class MyHomePage extends BasePage {
         }
 
         if (!snapshot.hasData) {
-          return const Center(child: Text('Usuario no encontrado'));
+          return Center(
+              child: Text(
+                  LocalizationService.of(context).translate('user_not_found')));
         }
 
         User? user = snapshot.data;
@@ -42,50 +44,61 @@ class MyHomePage extends BasePage {
                 title: Text((LocalizationService.of(context)?.translate('description') ?? 'Tradución no disponible') + user!.username,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                subtitle: Text(LocalizationService.of(context)?.translate('app_description') ?? 'Tradución no disponible'),
+                subtitle: Text(LocalizationService.of(context)
+                    .translate('app_description')),
               ),
               CustomCardMain(
-                title: Text(LocalizationService.of(context)?.translate('usage_drink') ?? 'Tradución no disponible',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                title: Text(
+                  LocalizationService.of(context).translate('usage_drink'),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 padding: 0,
                 top: 30,
                 bottom: 8,
-                subtitle: Text(LocalizationService.of(context)?.translate('usage_drink_description') ?? 'Tradución no disponible'),
+                subtitle: Text(LocalizationService.of(context)
+                    .translate('usage_drink_description')),
               ),
               PersonalizedCardMultiple(listTiles: [
                 ListTile(
                   leading: const Icon(Icons.local_fire_department),
                   iconColor: Colors.red,
                   title: Text(
-                    LocalizationService.of(context)?.translate('maltodextrin_grams') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'maltodextrin'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  subtitle: Text(
-                    LocalizationService.of(context)?.translate('maltodextrin_description') ?? 'Tradución no disponible'
-                  ),
+                  subtitle: Text(LocalizationService.of(context)
+                      .translate('ingredient_description', 'maltodextrin')),
                 ),
                 ListTile(
                   leading: const Icon(Icons.spa),
                   iconColor: Colors.red,
                   title: Text(
-                    LocalizationService.of(context)?.translate('fructose_grams') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'fructose'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('fructose_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'fructose'),
                   ),
                 ),
               ]),
               CustomCardMain(
-                title: Text(LocalizationService.of(context)?.translate('usage_gels') ?? 'Tradución no disponible',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                title: Text(
+                  LocalizationService.of(context).translate('usage_gels'),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 padding: 0,
                 top: 46,
                 bottom: 8,
                 subtitle: Text(
-                  LocalizationService.of(context)?.translate('usage_gels_description') ?? 'Tradución no disponible',
+                  LocalizationService.of(context)
+                      .translate('usage_gels_description'),
                 ),
               ),
               PersonalizedCardMultiple(listTiles: [
@@ -93,66 +106,82 @@ class MyHomePage extends BasePage {
                   leading: const Icon(Icons.energy_savings_leaf),
                   iconColor: Colors.red,
                   title: Text(
-                    LocalizationService.of(context)?.translate('maltodextrin_grams') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'maltodextrin'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('maltodextrin_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'maltodextrin'),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.energy_savings_leaf),
                   iconColor: Colors.red,
                   title: Text(
-                    LocalizationService.of(context)?.translate('fructose_grams') ?? 'Tradución no disponible',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'fructose'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('fructose_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'fructose'),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.emoji_food_beverage),
                   iconColor: const Color.fromARGB(255, 11, 187, 14),
                   title: Text(
-                    LocalizationService.of(context)?.translate('flavoring_grams') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'flavoring'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('flavoring_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'flavoring'),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.emoji_food_beverage),
                   iconColor: const Color.fromARGB(255, 11, 187, 14),
                   title: Text(
-                    LocalizationService.of(context)?.translate('salts_grams') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context)
+                        .translate('grams_of', 'salt'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('salts_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'salt'),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.local_drink),
                   iconColor: Colors.blue,
                   title: Text(
-                    LocalizationService.of(context)?.translate('water_ml') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context).translate('water_ml'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('water_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('ingredient_description', 'water'),
                   ),
                 ),
                 ListTile(
                   leading: const Icon(Icons.monitor_weight),
                   iconColor: const Color.fromARGB(255, 223, 182, 18),
                   title: Text(
-                    LocalizationService.of(context)?.translate('gel_weight') ?? 'Tradución no disponible',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    LocalizationService.of(context).translate('gel_weight'),
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    LocalizationService.of(context)?.translate('gel_weight_description') ?? 'Tradución no disponible',
+                    LocalizationService.of(context)
+                        .translate('gel_weight_description'),
                   ),
                 ),
               ]),

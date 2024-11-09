@@ -7,7 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
+void main() async {
+  // Asegúrate de que los servicios de Flutter están inicializados
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Cargar todos los idiomas necesarios al inicio
+  await LocalizationService.loadAllLanguages(
+      ['en', 'es']); // Añade los idiomas necesarios
+
+  // Ejecuta la aplicación después de cargar los idiomas
   runApp(
     MultiProvider(
       providers: [

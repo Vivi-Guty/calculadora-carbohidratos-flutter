@@ -1,6 +1,7 @@
 import 'package:calculadora_de_carbohidratos/models/gel_mix.dart';
 import 'package:calculadora_de_carbohidratos/models/ratio.dart';
 import 'package:calculadora_de_carbohidratos/models/ratio_dropdown_button.dart';
+import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:calculadora_de_carbohidratos/shared/base_page.dart';
 import 'package:flutter/material.dart';
 import 'services/shared_service.dart';
@@ -48,8 +49,9 @@ class _RatioInputState extends State<RatioInput> {
   SharedService sharedService = SharedService();
   List<RatioDropdownButton> ratioDropdownButtonList = <RatioDropdownButton>[];
   RatioDropdownButton dropdownValue = RatioDropdownButtonImpl(
-      ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
-      nameDropdown: 'Ratio 1:0,8');
+    nameDropdown: '',
+    ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
+  );
   bool? isCheckedFlavoring = true;
   bool? isCheckedSalts = true;
   bool? wantMoreWater = false;
@@ -79,8 +81,8 @@ class _RatioInputState extends State<RatioInput> {
   }
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     amountCarbohydratesPerGelsController.text =
         amountCarbohydratesPerGels.toString();
     numberGelsController.text = numberGels.toString();
@@ -92,15 +94,27 @@ class _RatioInputState extends State<RatioInput> {
     ratioDropdownButtonList = <RatioDropdownButton>[
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
-          nameDropdown: 'Ratio 1:0,8'),
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', '1:0,8') ==
+                  'Translation not available'
+              ? 'Translation not available 1:0,8'
+              : LocalizationService.of(context).translate('ratio', '1:0,8')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.5),
-          nameDropdown: 'Ratio 1:0,5'),
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', '1:0,5') ==
+                  'Translation not available'
+              ? 'Translation not available 1:0,5'
+              : LocalizationService.of(context).translate('ratio', '1:0,5')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(
               maltodextrin: double.parse(maltodextrinController.text),
               fructose: double.parse(fructoseController.text)),
-          nameDropdown: 'Ratio personalizado')
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', 'custom') ==
+                  'Translation not available'
+              ? 'Translation not available custom'
+              : LocalizationService.of(context).translate('ratio', 'custom'))
     ];
     dropdownValue = ratioDropdownButtonList.first;
   }
@@ -125,22 +139,30 @@ class _RatioInputState extends State<RatioInput> {
                     const SizedBox(height: 25),
                     CustomRow(
                         controller: amountCarbohydratesPerGelsController,
-                        title: 'Cantidad de carbohidratos por gel',
+                        title: LocalizationService.of(context)
+                            .translate('carbohydrates_per_gel'),
                         deltaValue: 1,
                         marginLeft: 15),
                     const SizedBox(height: 15),
                     CustomRow(
                         controller: numberGelsController,
-                        title: 'Número de Geles a preparar',
+                        title: LocalizationService.of(context)
+                            .translate('gels_to_prepare'),
                         deltaValue: 1,
                         marginLeft: 15),
                     if (dropdownValue.nameDropdown ==
-                        'Ratio personalizado') ...[
+                        (LocalizationService.of(context)
+                                    .translate('ratio', 'custom') ==
+                                'Translation not available'
+                            ? 'Translation not available custom'
+                            : LocalizationService.of(context)
+                                .translate('ratio', 'custom'))) ...[
                       const SizedBox(height: 25),
                       CustomRowWithRatio(
                         controller: maltodextrinController,
                         ratio: ratio,
-                        title: 'Maltodextrina (%)',
+                        title: LocalizationService.of(context).translate(
+                            'maltodextrin_plus_parameter', 'percentage'),
                         willBeChangedMaltodextrin: true,
                         deltaValue: 0.1,
                       ),
@@ -151,7 +173,8 @@ class _RatioInputState extends State<RatioInput> {
                       CustomRowWithRatio(
                         controller: fructoseController,
                         ratio: ratio,
-                        title: 'Fructosa (%)',
+                        title: LocalizationService.of(context)
+                            .translate('fructose_plus_parameter', 'percentage'),
                         willBeChangedMaltodextrin: false,
                         deltaValue: 0.1,
                       ),
@@ -162,7 +185,8 @@ class _RatioInputState extends State<RatioInput> {
                     ],
                     CustomCheckboxListTile(
                         isChecked: wantMoreWater,
-                        title: '¿Quieres cambiar la cantidad de agua por gel?',
+                        title: LocalizationService.of(context)
+                            .translate('change_water_per_gel_question'),
                         onChanged: (bool? value) {
                           setState(() {
                             wantMoreWater = value;
@@ -172,7 +196,8 @@ class _RatioInputState extends State<RatioInput> {
                       CustomRowWithRatio(
                         controller: wantMoreWaterController,
                         ratio: ratio,
-                        title: 'Cantidad de agua por gel',
+                        title: LocalizationService.of(context)
+                            .translate('water_per_gel'),
                         willBeChangedMaltodextrin: true,
                         deltaValue: 0.1,
                       ),
@@ -180,18 +205,26 @@ class _RatioInputState extends State<RatioInput> {
                     ],
                     CustomCheckboxListTile(
                         isChecked: isCheckedFlavoring,
-                        title: '¿Quieres saborizante?',
+                        title: LocalizationService.of(context)
+                            .translate('do_you_want', 'flavoring'),
                         onChanged: (bool? value) {
                           setState(() {
                             isCheckedFlavoring = value;
                           });
                         }),
-                    if (dropdownValue.nameDropdown == 'Ratio personalizado' &&
+                    if (dropdownValue.nameDropdown ==
+                            (LocalizationService.of(context)
+                                        .translate('ratio', 'custom') ==
+                                    'Translation not available'
+                                ? 'Translation not available custom'
+                                : LocalizationService.of(context)
+                                    .translate('ratio', 'custom')) &&
                         isCheckedFlavoring == true) ...[
                       CustomRowWithRatio(
                         controller: flavoringController,
                         ratio: ratio,
-                        title: 'Saborizante por gel',
+                        title: LocalizationService.of(context)
+                            .translate('per_gel', 'flavoring'),
                         willBeChangedMaltodextrin: true,
                         deltaValue: 0.1,
                       ),
@@ -199,18 +232,26 @@ class _RatioInputState extends State<RatioInput> {
                     ],
                     CustomCheckboxListTile(
                         isChecked: isCheckedSalts,
-                        title: '¿Quieres sales?',
+                        title: LocalizationService.of(context)
+                            .translate('do_you_want', 'salt'),
                         onChanged: (bool? value) {
                           setState(() {
                             isCheckedSalts = value;
                           });
                         }),
-                    if (dropdownValue.nameDropdown == 'Ratio personalizado' &&
+                    if (dropdownValue.nameDropdown ==
+                            (LocalizationService.of(context)
+                                        .translate('ratio', 'custom') ==
+                                    'Translation not available'
+                                ? 'Translation not available custom'
+                                : LocalizationService.of(context)
+                                    .translate('ratio', 'custom')) &&
                         isCheckedSalts == true) ...[
                       CustomRowWithRatio(
                         controller: saltsController,
                         ratio: ratio,
-                        title: 'Sales por gel',
+                        title: LocalizationService.of(context)
+                            .translate('per_gel', 'salt'),
                         willBeChangedMaltodextrin: true,
                         deltaValue: 0.1,
                       )
@@ -218,7 +259,8 @@ class _RatioInputState extends State<RatioInput> {
                     const SizedBox(height: 25),
                     ElevatedButton(
                       onPressed: gelCalculate,
-                      child: const Text('Calcular'),
+                      child: Text(LocalizationService.of(context)
+                          .translate('calculate')),
                     ),
                     const SizedBox(height: 25),
                   ],
@@ -228,22 +270,26 @@ class _RatioInputState extends State<RatioInput> {
               Card(
                 child: Column(
                   children: <Widget>[
-                    const Text(
-                      'Resultados',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Text(
+                      LocalizationService.of(context).translate('results'),
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     ResultRow(
-                      label: 'Gramos de maltodextrina',
-                      value: '${gelMix.gramsMaltodextrin.toString()} gramos',
+                      label: LocalizationService.of(context)
+                          .translate('grams_of', 'maltodextrin'),
+                      value:
+                          '${gelMix.gramsMaltodextrin.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                       icon: Icons.energy_savings_leaf,
                       color: Colors.red,
                       iconSize: 24.0,
                     ),
                     ResultRow(
-                      label: 'Gramos de fructosa',
-                      value: '${gelMix.gramsFructose.toString()} gramos',
+                      label: LocalizationService.of(context)
+                          .translate('grams_of', 'fructose'),
+                      value:
+                          '${gelMix.gramsFructose.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                       icon: Icons.energy_savings_leaf,
                       color: Colors.red,
                       iconSize: 24.0,
@@ -251,8 +297,10 @@ class _RatioInputState extends State<RatioInput> {
                     const SizedBox(height: 15),
                     if (isCheckedFlavoring == true) ...[
                       ResultRow(
-                        label: 'Gramos de saborizante',
-                        value: '${gelMix.flavorings.toString()} gramos',
+                        label: LocalizationService.of(context)
+                            .translate('grams_of', 'flavoring'),
+                        value:
+                            '${gelMix.flavorings.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                         icon: Icons.emoji_food_beverage,
                         color: const Color.fromARGB(255, 11, 187, 14),
                         iconSize: 24.0,
@@ -260,8 +308,10 @@ class _RatioInputState extends State<RatioInput> {
                     ],
                     if (isCheckedSalts == true) ...[
                       ResultRow(
-                        label: 'Gramos de sales',
-                        value: '${gelMix.salts.toString()} gramos',
+                        label: LocalizationService.of(context)
+                            .translate('grams_of', 'salt'),
+                        value:
+                            '${gelMix.salts.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                         icon: Icons.emoji_food_beverage,
                         color: const Color.fromARGB(255, 11, 187, 14),
                         iconSize: 24.0,
@@ -272,16 +322,20 @@ class _RatioInputState extends State<RatioInput> {
                       const SizedBox(height: 15),
                     ],
                     ResultRow(
-                      label: 'Mililitros de agua',
-                      value: '${gelMix.water.toString()} mililitros',
+                      label:
+                          LocalizationService.of(context).translate('water_ml'),
+                      value:
+                          '${gelMix.water.toString()} ${LocalizationService.of(context).translate('milliliters', '', true)}',
                       icon: Icons.water,
                       color: Colors.blue,
                       iconSize: 24.0,
                     ),
                     const SizedBox(height: 15),
                     ResultRow(
-                      label: 'Peso por gel',
-                      value: '${gelMix.gelWeight.toString()} gramos',
+                      label: LocalizationService.of(context)
+                          .translate('per_gel', 'weight'),
+                      value:
+                          '${gelMix.gelWeight.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
                       icon: Icons.monitor_weight,
                       color: const Color.fromARGB(255, 223, 182, 18),
                       iconSize: 24.0,
