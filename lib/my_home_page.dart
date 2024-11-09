@@ -39,7 +39,7 @@ class MyHomePage extends BasePage {
           child: Column(
             children: [
               CustomCardMain(
-                title: Text(LocalizationService.of(context)?.translate('description') ?? 'Tradución no disponible',
+                title: Text((LocalizationService.of(context)?.translate('description') ?? 'Tradución no disponible') + user!.username,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(LocalizationService.of(context)?.translate('app_description') ?? 'Tradución no disponible'),

@@ -3,6 +3,7 @@ import 'package:calculadora_de_carbohidratos/login/users.dart';
 import 'package:calculadora_de_carbohidratos/my_home_page.dart';
 import 'package:calculadora_de_carbohidratos/provider/user_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
 // import 'package:http/http.dart' as http; // Add this line to import the http package
@@ -33,8 +34,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
+  Future<List> fetchUserFromLocalServer() async {
+    final jsondata = await rootBundle.loadString('assets/db.json');
+    final Map<String, dynamic> data = json.decode(jsondata);
+    return data['users'] != null ? (data['users'] as List).map((e) => User.fromMap(e)).toList() : [];
+  }
   // Lista simulada de usuarios registrados
-  final List<User> users = [
+  final List<User> users = //await fetchUserFromLocalServer();
+  [
     User(
         email: 'admin@admin.com',
         username: 'admin',
