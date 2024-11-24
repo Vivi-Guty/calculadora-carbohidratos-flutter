@@ -34,14 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
-
-  Future<List<User>> fetchUserFromLocalServer() async {
-    final jsondata = await rootBundle.loadString('assets/db.json');
-    final Map<String, dynamic> data = json.decode(jsondata);
-    return data['users'] != null ? (data['users'] as List).map((e) => User.fromMap(e)).toList() : List<User>.empty();
-  }
-  // Lista simulada de usuarios registrados
-  final List<User> users = await fetchUserFromLocalServer();
+  
   final List<User> users = //await fetchUserFromLocalServer();
   [
     User(
