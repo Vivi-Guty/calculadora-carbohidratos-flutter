@@ -46,9 +46,10 @@
   "spanish": "español",
   "new_username": "nuevo nombre de usuario",
   "main_menu": "main menu",
-  "isotonic_drink": "isotonic drink",
+  "isotonic_drink": "bebida isotónica",
   "gel_creation": "gel creation",
   "incorrect_user_or_password": "usuario o contraseña incorrectos",
   "drink_volume": "volumen de bebida",
+  "ml": "ml",
   "drink_concentration": "concentración de bebida"
 }

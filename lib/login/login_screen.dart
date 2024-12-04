@@ -4,7 +4,6 @@ import 'package:calculadora_de_carbohidratos/my_home_page.dart';
 import 'package:calculadora_de_carbohidratos/provider/user_provider.dart';
 import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:provider/provider.dart';
 // import 'package:http/http.dart' as http; // Add this line to import the http package
@@ -38,9 +37,9 @@ class LoginScreen extends StatelessWidget {
   final List<User> users = //await fetchUserFromLocalServer();
   [
     User(
-        email: 'admin@admin.com',
+        email: '',
         username: 'admin',
-        password: 'admin123',
+        password: '',
         isPremium: true),
     User(
         email: 'victor@gmail.com',
