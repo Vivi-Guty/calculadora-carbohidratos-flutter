@@ -4,6 +4,14 @@
     // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+        // Flutter (YAL L21)
+        {
+            "name": "Flutter (YAL L21)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "YAL L21",
+            "flutterMode": "debug"
+        },
         // Flutter (Pixel 8 Pro)
         {
             "name": "Pixel 8 Pro",

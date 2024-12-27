@@ -45,11 +45,12 @@
   "english": "english",
   "spanish": "spanish",
   "new_username": "new username",
-  "main_menu": "main menu",
+  "main_menu": "home page",
   "isotonic_drink": "isotonic drink",
   "gel_creation": "gel creation",
   "incorrect_user_or_password": "incorrect username or password",
   "drink_volume": "drink volume",
   "ml": "ml",
-  "drink_concentration": "drink concentration"
+  "drink_concentration": "drink concentration",
+  "basic": "basic"
 }

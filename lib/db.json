@@ -1,6 +1,6 @@
 {
     "users": [
-      { "email": "admin@admin.com", "username": "admin", "password": "admin123", "isPremium": true },
+      { "email": "admin@admin.com", "username": "admin", "password": "admin", "isPremium": true },
       { "email": "victor@gmail.com", "username": "victor", "password": "victor", "isPremium": false }
     ]
   }

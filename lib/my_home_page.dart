@@ -25,6 +25,8 @@ class MyHomePage extends BasePage {
     return FutureBuilder<User?>(
       future: _getCachedUser(),
       builder: (context, snapshot) {
+        // User? user = snapshot.data;
+
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
@@ -35,14 +37,15 @@ class MyHomePage extends BasePage {
                   LocalizationService.of(context).translate('user_not_found')));
         }
 
-        User? user = snapshot.data;
         return SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 30.0),
           child: Column(
             children: [
               CustomCardMain(
-                title: Text((LocalizationService.of(context).translate('description') ?? 'Tradución no disponible') + user!.username,
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                title: Text(
+                  (LocalizationService.of(context).translate('description')),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 subtitle: Text(LocalizationService.of(context)
                     .translate('app_description')),

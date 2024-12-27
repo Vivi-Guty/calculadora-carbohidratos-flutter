@@ -84,11 +84,10 @@ class _RatioInputState extends State<RatioInput> {
               : LocalizationService.of(context).translate('ratio', '1:0,8')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.5),
-          nameDropdown: LocalizationService.of(context)
-                      .translate('ratio', '1:0,5') ==
+          nameDropdown: LocalizationService.of(context).translate('basic') ==
                   'Translation not available'
-              ? 'Translation not available 1:0,5'
-              : LocalizationService.of(context).translate('ratio', '1:0,5')),
+              ? 'Translation not available basic'
+              : LocalizationService.of(context).translate('basic')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(
               maltodextrin: double.parse(maltodextrinController.text),
@@ -99,7 +98,7 @@ class _RatioInputState extends State<RatioInput> {
               ? 'Translation not available custom'
               : LocalizationService.of(context).translate('ratio', 'custom'))
     ];
-    dropdownValue = ratioDropdownButtonList.first;
+    dropdownValue = ratioDropdownButtonList[1];
   }
 
   @override
