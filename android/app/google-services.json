@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "198717024038",
+    "project_id": "carbboostest",
+    "storage_bucket": "carbboostest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:198717024038:android:c0bd5f089289fd773043e7",
+        "android_client_info": {
+          "package_name": "com.carboos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmw7YZ1wisd6k60HbrVJhzfW0BZKsJOms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

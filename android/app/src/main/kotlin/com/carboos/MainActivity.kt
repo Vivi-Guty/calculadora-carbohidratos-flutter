@@ -1,4 +1,4 @@
-package com.example.calculadora_de_carbohidratos
+package com.carboos
 
 import io.flutter.embedding.android.FlutterActivity
 

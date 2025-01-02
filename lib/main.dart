@@ -6,10 +6,16 @@ import 'package:calculadora_de_carbohidratos/theme/theme_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   // Asegúrate de que los servicios de Flutter están inicializados
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // Cargar todos los idiomas necesarios al inicio
   await LocalizationService.loadAllLanguages(
