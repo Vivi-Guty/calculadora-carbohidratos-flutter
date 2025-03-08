@@ -106,7 +106,7 @@ class _RatioInputState extends State<RatioInput> {
     fructoseController.text = ratio.fructose.toString();
     flavoringController.text = '1.0';
     saltsController.text = '1.0';
-    wantMoreWaterController.text = '3.0';
+    wantMoreWaterController.text = '33.0';
     ratioDropdownButtonList = <RatioDropdownButton>[
       RatioDropdownButtonImpl(
           ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
@@ -127,7 +127,8 @@ class _RatioInputState extends State<RatioInput> {
                       .translate('ratio', '1:0,8Protein') ==
                   'Translation not available'
               ? 'Translation not available 1:0,8 with protein'
-              : LocalizationService.of(context).translate('ratio', '1:0,8Protein')),
+              : LocalizationService.of(context)
+                  .translate('ratio', '1:0,8Protein')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(
               maltodextrin: double.parse(maltodextrinController.text),
@@ -203,6 +204,7 @@ class _RatioInputState extends State<RatioInput> {
                                   'maltodextrin_plus_parameter', 'percentage'),
                               willBeChangedMaltodextrin: true,
                               deltaValue: 0.1,
+                              marginLeft: 15,
                             ),
                             const Divider(
                               color: Colors.transparent,
@@ -215,6 +217,7 @@ class _RatioInputState extends State<RatioInput> {
                                   'fructose_plus_parameter', 'percentage'),
                               willBeChangedMaltodextrin: false,
                               deltaValue: 0.1,
+                              marginLeft: 15,
                             ),
                             const Divider(
                               color: Colors.transparent,
@@ -236,8 +239,10 @@ class _RatioInputState extends State<RatioInput> {
                               ratio: ratio,
                               title: LocalizationService.of(context)
                                   .translate('water_per_gel'),
+                              magnitude: '%',
                               willBeChangedMaltodextrin: true,
-                              deltaValue: 0.1,
+                              deltaValue: 1,
+                              marginLeft: 15,
                             ),
                             const SizedBox(height: 25)
                           ],
@@ -266,6 +271,7 @@ class _RatioInputState extends State<RatioInput> {
                                   .translate('per_gel', 'flavoring'),
                               willBeChangedMaltodextrin: true,
                               deltaValue: 0.1,
+                              marginLeft: 15,
                             ),
                             const SizedBox(height: 25)
                           ],
@@ -294,6 +300,7 @@ class _RatioInputState extends State<RatioInput> {
                                   .translate('per_gel', 'salt'),
                               willBeChangedMaltodextrin: true,
                               deltaValue: 0.1,
+                              marginLeft: 15,
                             )
                           ],
                           const SizedBox(height: 25),
@@ -335,7 +342,9 @@ class _RatioInputState extends State<RatioInput> {
                             color: Colors.red,
                             iconSize: 24.0,
                           ),
-                          if (isCheckedFlavoring == true && dropdownValue.nameDropdown == LocalizationService.of(context).translate('ratio', '1:0,8Protein')) ...[
+                          if (dropdownValue.nameDropdown ==
+                              LocalizationService.of(context)
+                                  .translate('ratio', '1:0,8Protein')) ...[
                             ResultRow(
                               label: LocalizationService.of(context)
                                   .translate('grams_of', 'protein'),

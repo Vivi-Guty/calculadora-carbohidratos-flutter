@@ -63,7 +63,7 @@ class CustomRow extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: title,
-                    suffix: Text(" " + magnitude),
+                    suffix: Text(" $magnitude"),
                   ),
                 ),
               ),

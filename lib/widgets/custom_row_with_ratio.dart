@@ -97,6 +97,7 @@ class CustomRowWithRatio extends StatelessWidget {
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: title,
+                    suffix: Text(" $magnitude"),
                   ),
                 ),
               ),

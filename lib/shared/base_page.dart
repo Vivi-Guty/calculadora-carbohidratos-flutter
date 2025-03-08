@@ -20,9 +20,16 @@ abstract class BasePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title),
+            Expanded(
+              // Evita que el título empuje los iconos
+              child: Text(
+                title,
+                overflow:
+                    TextOverflow.ellipsis, // Corta el texto si es muy largo
+                maxLines: 1, // Mantiene el título en una sola línea
+              ),
+            ),
             IconButton(
               onPressed: () {
                 themeNotifier.toggleTheme();

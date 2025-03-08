@@ -139,6 +139,7 @@ class _RatioInputState extends State<RatioInput> {
                         title: LocalizationService.of(context)
                             .translate('drink_concentration'),
                         magnitude: '%',
+                        marginLeft: 15,
                         deltaValue: 1,
                       ),
                       const SizedBox(height: 25),
