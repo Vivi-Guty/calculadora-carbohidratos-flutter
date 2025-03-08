@@ -8,11 +8,12 @@ import 'package:calculadora_de_carbohidratos/services/localization_service.dart'
 import 'package:calculadora_de_carbohidratos/shared/base_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'services/shared_service.dart';
+import 'widgets/custom_checkbox_list_tile.dart';
 import 'widgets/custom_dropdown_button.dart';
 import 'widgets/custom_row.dart';
 import 'widgets/custom_row_with_ratio.dart';
-import 'widgets/custom_checkbox_list_tile.dart';
 import 'widgets/result_row.dart';
 
 class GelsCreation extends BasePage {
@@ -50,10 +51,11 @@ class _RatioInputState extends State<RatioInput> {
   final saltsController = TextEditingController();
   final wantMoreWaterController = TextEditingController();
   int numberGels = 1;
-  int amountCarbohydratesPerGels = 30;
+  int amountCarbohydratesPerGels = 45;
   GelMix gelMix = GelMixImpl(
       gramsMaltodextrin: 0.0,
       gramsFructose: 0.0,
+      gramsProtein: 0.0,
       flavorings: 0.0,
       salts: 0.0,
       water: 0,
@@ -65,8 +67,8 @@ class _RatioInputState extends State<RatioInput> {
     nameDropdown: '',
     ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
   );
-  bool? isCheckedFlavoring = true;
-  bool? isCheckedSalts = true;
+  bool? isCheckedFlavoring = false;
+  bool? isCheckedSalts = false;
   bool? wantMoreWater = false;
 
   void gelCalculate() {
@@ -83,7 +85,8 @@ class _RatioInputState extends State<RatioInput> {
           dropdownValue.nameDropdown,
           double.parse(flavoringController.text),
           double.parse(saltsController.text),
-          double.parse(wantMoreWaterController.text));
+          double.parse(wantMoreWaterController.text),
+          context);
     });
   }
 
@@ -118,6 +121,13 @@ class _RatioInputState extends State<RatioInput> {
                   'Translation not available'
               ? 'Translation not available basic'
               : LocalizationService.of(context).translate('basic')),
+      RatioDropdownButtonImpl(
+          ratio: RatioImpl(maltodextrin: 1, fructose: 0.8),
+          nameDropdown: LocalizationService.of(context)
+                      .translate('ratio', '1:0,8Protein') ==
+                  'Translation not available'
+              ? 'Translation not available 1:0,8 with protein'
+              : LocalizationService.of(context).translate('ratio', '1:0,8Protein')),
       RatioDropdownButtonImpl(
           ratio: RatioImpl(
               maltodextrin: double.parse(maltodextrinController.text),
@@ -325,6 +335,17 @@ class _RatioInputState extends State<RatioInput> {
                             color: Colors.red,
                             iconSize: 24.0,
                           ),
+                          if (isCheckedFlavoring == true && dropdownValue.nameDropdown == LocalizationService.of(context).translate('ratio', '1:0,8Protein')) ...[
+                            ResultRow(
+                              label: LocalizationService.of(context)
+                                  .translate('grams_of', 'protein'),
+                              value:
+                                  '${gelMix.gramsProtein.toString()} ${LocalizationService.of(context).translate('grams', '', true)}',
+                              icon: Icons.energy_savings_leaf,
+                              color: Colors.red,
+                              iconSize: 24.0,
+                            ),
+                          ],
                           const SizedBox(height: 15),
                           if (isCheckedFlavoring == true) ...[
                             ResultRow(

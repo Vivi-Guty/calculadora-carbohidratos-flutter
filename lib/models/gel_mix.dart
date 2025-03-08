@@ -1,6 +1,7 @@
 abstract class GelMix {
   double get gramsMaltodextrin;
   double get gramsFructose;
+  double get gramsProtein;
   double get flavorings;
   double get salts;
   int get water;
@@ -13,6 +14,8 @@ class GelMixImpl implements GelMix {
   final double gramsMaltodextrin;
   @override
   final double gramsFructose;
+  @override
+  final double gramsProtein;
   @override
   final double flavorings;
   @override
@@ -27,6 +30,7 @@ class GelMixImpl implements GelMix {
   GelMixImpl({
     required this.gramsMaltodextrin,
     required this.gramsFructose,
+    required this.gramsProtein,
     required this.flavorings,
     required this.salts,
     required this.water,

@@ -22,6 +22,7 @@
   "ratio": "ratio {parameter}",
   "1:0,8": "1:0,8",
   "1:0,5": "1:0,5",
+  "1:0,8Protein": "1:0,8 with protein",
   "custom": "custom",
   "carbohydrates_per_gel": "amount of carbohydrates per gel",
   "gels_to_prepare": "number of gels to prepare",

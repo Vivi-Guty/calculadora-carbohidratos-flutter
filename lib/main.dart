@@ -3,10 +3,11 @@ import 'package:calculadora_de_carbohidratos/provider/locale_provider.dart';
 import 'package:calculadora_de_carbohidratos/provider/user_provider.dart';
 import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:calculadora_de_carbohidratos/theme/theme_notifier.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
 import 'firebase_options.dart';
 
 void main() async {
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeNotifier = Provider.of<ThemeNotifier>(context);
     final localeProvider = Provider.of<LocaleProvider>(context);
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
     return MaterialApp(
       theme: themeNotifier.currentTheme,
@@ -56,6 +58,7 @@ class MyApp extends StatelessWidget {
       ],
       locale: localeProvider.locale, // Usa el locale actual del LocaleProvider
       home: LoginScreen(),
+      navigatorKey: navigatorKey,
     );
   }
 }
