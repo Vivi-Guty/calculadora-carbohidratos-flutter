@@ -1,8 +1,8 @@
+import 'package:calculadora_de_carbohidratos/creation_isotonic_drink.dart';
+import 'package:calculadora_de_carbohidratos/gels_creation.dart';
+import 'package:calculadora_de_carbohidratos/my_home_page.dart';
 import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:flutter/material.dart';
-import '../../creation_isotonic_drink.dart';
-import '../../gels_creation.dart';
-import '../../my_home_page.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});

@@ -4,11 +4,11 @@ import 'package:calculadora_de_carbohidratos/models/ratio_dropdown_button.dart';
 import 'package:calculadora_de_carbohidratos/services/localization_service.dart';
 import 'package:calculadora_de_carbohidratos/services/shared_service.dart';
 import 'package:calculadora_de_carbohidratos/shared/base_page.dart';
+import 'package:calculadora_de_carbohidratos/widgets/custom_dropdown_button.dart';
+import 'package:calculadora_de_carbohidratos/widgets/custom_row.dart';
+import 'package:calculadora_de_carbohidratos/widgets/custom_row_with_ratio.dart';
+import 'package:calculadora_de_carbohidratos/widgets/result_row.dart';
 import 'package:flutter/material.dart';
-import 'widgets/custom_dropdown_button.dart';
-import 'widgets/custom_row.dart';
-import 'widgets/custom_row_with_ratio.dart';
-import 'widgets/result_row.dart';
 
 class CreationIsotonicDrink extends BasePage {
   const CreationIsotonicDrink({super.key, required super.title});
